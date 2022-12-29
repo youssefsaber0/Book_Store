@@ -1,70 +1,51 @@
-# Getting Started with Create React App
+# Custom project from Hilla
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project can be used as a starting point to create your own Hilla application with Spring Boot.
+It contains all the necessary configuration and some placeholder files to get you started.
 
-## Available Scripts
+## Running the application
 
-In the project directory, you can run:
+The project is a standard Maven project. To run it from the command line,
+type `mvnw` (Windows), or `./mvnw` (Mac & Linux), then open
+http://localhost:8080 in your browser.
 
-### `npm start`
+You can also import the project to your IDE of choice as you would with any
+Maven project.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Deploying to Production
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+To create a production build, call `mvnw clean package -Pproduction` (Windows),
+or `./mvnw clean package -Pproduction` (Mac & Linux).
+This will build a JAR file with all the dependencies and front-end resources,
+ready to be deployed. The file can be found in the `target` folder after the build completes.
 
-### `npm test`
+Once the JAR file is built, you can run it using
+`java -jar target/myapp-1.0-SNAPSHOT.jar` (NOTE, replace
+`myapp-1.0-SNAPSHOT.jar` with the name of your jar).
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Project structure
 
-### `npm run build`
+<table style="width:100%; text-align: left;">
+  <tr><th>Directory</th><th>Description</th></tr>
+  <tr><td><code>frontend/</code></td><td>Client-side source directory</td></tr>
+  <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;<code>index.html</code></td><td>HTML template</td></tr>
+  <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;<code>index.ts</code></td><td>Frontend 
+entrypoint, bootstraps a React application</td></tr>
+  <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;<code>routes.tsx</code></td><td>React Router routes definition</td></tr>
+  <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;<code>MainLayout.tsx</code></td><td>Main 
+layout component, contains the navigation menu, uses <a href="https://hilla.dev/docs/react/components/app-layout">
+App Layout</a></td></tr>
+  <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;<code>views/</code></td><td>UI view 
+components</td></tr>
+  <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;<code>themes/</code></td><td>Custom  
+CSS styles</td></tr>
+  <tr><td><code>src/main/java/&lt;groupId&gt;/</code></td><td>Server-side 
+source directory, contains the server-side Java views</td></tr>
+  <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;<code>Application.java</code></td><td>Server entry-point</td></tr>
+</table>
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Useful links
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- Read the documentation at [hilla.dev/docs](https://hilla.dev/docs/).
+- Ask questions on [Stack Overflow](https://stackoverflow.com/questions/tagged/hilla) or join our [Discord channel](https://discord.gg/MYFq5RTbBn).
+- Report issues, create pull requests in [GitHub](https://github.com/vaadin/hilla).
