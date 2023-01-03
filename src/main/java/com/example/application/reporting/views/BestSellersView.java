@@ -10,13 +10,14 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
+
 @AllArgsConstructor
 @Entity
 @Immutable
-@Table(name = "`book_sales`")
+@Table(name = "`best_sellers'")
 @Getter
 @NoArgsConstructor
-public class BookSalesView implements Serializable {
+public class BestSellersView implements Serializable {
     @Id
     @Column(name = "isbn")
     private String isbn;
