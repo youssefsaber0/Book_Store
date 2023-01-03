@@ -12,165 +12,257 @@ import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Component, useState } from 'react';
 import VisibilityIcon from '@mui/icons-material/Visibility';
-import { InputAdornment } from '@mui/material';
+import { FormControl, FormControlLabel, FormLabel, InputAdornment, Radio, RadioGroup } from '@mui/material';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import EmailIcon from '@mui/icons-material/Email';
 const theme = createTheme();
-export default function SignupView (){
-        const [email,setEmail] = useState<string>();
-            const [password,setPassword] = useState<string>('');
-            const [confirmPassword,setConfirmPassword] = useState<string>('');
+type ruleProps = {
+  onChange: any;
+};
+function Rule({ onChange }: ruleProps) {
+  return (
+    <FormControl>
+      <FormLabel
+        id="Rule"
+        sx={{
+          fontSize: 18,
+        }}
+      >
+        Rule
+      </FormLabel>
+      <RadioGroup
+        row
+        aria-labelledby="Rule"
+        name="row-radio-Rule"
+        onChange={(event) => {
+          onChange(event.target.value);
+        }}
+      >
+        <FormControlLabel value="user" control={<Radio />} label="user" />
+        <FormControlLabel value="Admin" control={<Radio />} label="Admin" />
+      </RadioGroup>
+    </FormControl>
+  );
+}
+type passwordProps = {
+  lab: String;
+  id: string;
+  onChange: any;
+};
+export function Password({ lab, id, onChange }: passwordProps) {
+  const [password, setPassword] = useState<string>('');
+  const [isPassword, setIsPassword] = useState<boolean>(true);
+  return (
+    <TextField
+      // error={}
+      margin="normal"
+      required
+      fullWidth
+      name={id}
+      label={lab}
+      type={isPassword ? 'password' : 'text'}
+      id={id}
+      onChange={(e) => {
+        setPassword(e.currentTarget.value);
+        onChange(e.currentTarget.value);
+      }}
+      error={password?.length < 8}
+      helperText={password?.length < 8 ? 'Password must be more than eight characters' : ''}
+      InputProps={{
+        startAdornment: (
+          <InputAdornment position="start" onClick={() => setIsPassword(!isPassword)}>
+            {isPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
+          </InputAdornment>
+        ),
+      }}
+      autoComplete="current-password"
+    />
+  );
+}
+export default function SignupView() {
+  const [email, setEmail] = useState<string>();
+  const [password, setPassword] = useState<string>('');
+  const [confirmPassword, setConfirmPassword] = useState<string>('');
+  const [rule, setRule] = useState<string>('');
 
-            const [isPassword,setIsPassword] = useState<boolean>(true);
-            const [isConfirmPassword,setIsConfirmPassword] = useState<boolean>(true);
-
-    const handleSubmit = (event:any) => {
-      event.preventDefault();
-      const data = new FormData(event.currentTarget);
-      if(isEmailValid()&&password?.length > 8){
+  const handleSubmit = () => {
+    if (isEmailValid() && password.length >= 8 && confirmPassword === password && rule.length > 0) {
       console.log({
-          email: email,
-          password: password,
-        });
-      }
-    };
-     const isEmailValid=()=>{
-      const regex = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
-      if(!email || regex.test(email) === false){
-        console.log(false);
-          return false;
-      }
-      return true;
+        email: email,
+        password: password,
+        rule: rule,
+      });
     }
+  };
+  const isEmailValid = () => {
+    const regex =
+      /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+    if (!email || regex.test(email) === false) {
+      console.log(false);
+      return false;
+    }
+    return true;
+  };
 
-    
-        return (<ThemeProvider theme={theme}>
-        <Grid container component="main" sx={{ height: '100vh' }}>
-          <CssBaseline />
-          <Grid
-            item
-            xs={false}
-            
-            sx={{
-              width:'100%',
-              backgroundColor: 'rgb(0, 230, 255)',
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-            }}
-          >
-          <Grid container 
-          alignItems="center"
-          justifyContent="center"
-          style={{ minHeight: '100vh' }}
-          >
-          <Grid item xs={12} sm={8} md={5} 
-          component={Paper} elevation={6} square 
-          
-          >
-          
-            <Box
-              sx={{
-                my: 8,
-                mx: 4,
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-              }}
-            >
-              <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-                <LockOutlinedIcon />
-              </Avatar>
-              <Typography component="h1" variant="h5">
-                Sign UP
-              </Typography>
-              <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
-                <TextField
-                              InputProps={{startAdornment: (
-                                <InputAdornment position="start" onClick={() => setIsPassword(!isPassword)}>
-    
-                                    <EmailIcon />
-                        
-                                </InputAdornment>
-                            )}}
-                  margin="normal"
-                  required
-                  fullWidth
-                  id="email"
-                  label="Email Address"
-                  onChange={(val)=>{setEmail(val.currentTarget.value)
-                  }}
-                  name="email"
-                  autoComplete="email"
-                  error={!isEmailValid()}
-                  helperText={!isEmailValid() ? "Not valid email" : ""}
-                  autoFocus
-                />
-                <TextField
-                // error={}
-                  margin="normal"
-                  required
-                  fullWidth
-                  name="password"
-                  label="Password"
-                  type={isPassword?"password":'text'}
-                  id="password"
-                  onChange={(val)=>{setPassword(val.currentTarget.value)
-                  }}
-                  error={(password?.length < 8)}
-                  helperText={(password?.length < 8) ? "Password must be more than eight characters" : ""}
-                  InputProps={{startAdornment: (
-                    <InputAdornment position="start" onClick={() => setIsPassword(!isPassword)}>
-                      {
-                        isPassword?<VisibilityIcon/>:<VisibilityOffIcon/> 
-                      }
-                    </InputAdornment>
-                )}}
-                  autoComplete="current-password"
-                />
-                <TextField
-                // error={}
-                  margin="normal"
-                  required
-                  fullWidth
-                  name="Confirm password"
-                  label="Confirm password"
-                  type={isConfirmPassword?"password":'text'}
-                  id="confirmPassword"
-                  onChange={(val)=>{setConfirmPassword(val.currentTarget.value)
-                  }}
-                  error={(confirmPassword?.length < 8)}
-                  helperText={(confirmPassword?.length < 8) ? "Password must be more than eight characters" : ""}
-                  InputProps={{startAdornment: (
-                    <InputAdornment position="start" onClick={() => setIsConfirmPassword(!isConfirmPassword)}>
-                      {
-                        isConfirmPassword?<VisibilityIcon/>:<VisibilityOffIcon/> 
-                      }
-                    </InputAdornment>
-                )}}
-                  autoComplete="current-password"
-                />
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  sx={{ mt: 3, mb: 2 ,height:"60px"}}
-                >
-                  Sign In
-                </Button>
-                <Grid container>
-    
-                  <Grid item>
-                    <Link href="#" variant="body2">
-                      {"Don't have an account? Sign Up"}
-                    </Link>
+  return (
+    <ThemeProvider theme={theme}>
+      <Grid container component="main" sx={{ height: '100vh' }}>
+        <CssBaseline />
+        <Grid
+          item
+          xs={false}
+          sx={{
+            width: '100%',
+            backgroundColor: '#E1F5FE',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+          }}
+        >
+          <Grid container alignItems="center" justifyContent="center" style={{ minHeight: '100vh' }}>
+            <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+              <Box
+                sx={{
+                  my: 8,
+                  mx: 4,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                }}
+              >
+                <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+                  <LockOutlinedIcon />
+                </Avatar>
+                <Typography component="h1" variant="h5">
+                  Sign UP
+                </Typography>
+                <Box sx={{ mt: 2 }}>
+                  <TextField
+                    sx={{ display: 'inline-flex', width: '49%', marginRight: '1%' }}
+                    margin="normal"
+                    required
+                    fullWidth
+                    id="firstName"
+                    label="First name"
+                    name="first name"
+                    autoFocus
+                  />
+                  <TextField
+                    margin="normal"
+                    required
+                    fullWidth
+                    id="lastName"
+                    label="Last name"
+                    name="Last name"
+                    sx={{ display: 'inline-flex', width: '50%' }}
+                    autoFocus
+                  />
+                  <TextField
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <EmailIcon />
+                        </InputAdornment>
+                      ),
+                    }}
+                    margin="normal"
+                    required
+                    fullWidth
+                    id="email"
+                    label="Email Address"
+                    onChange={(val) => {
+                      setEmail(val.currentTarget.value);
+                    }}
+                    name="email"
+                    autoComplete="email"
+                    error={!isEmailValid()}
+                    helperText={!isEmailValid() ? 'Not valid email' : ''}
+                    autoFocus
+                  />
+                  <Password
+                    lab={'password'}
+                    id={'password'}
+                    onChange={(value: React.SetStateAction<string>) => setPassword(value)}
+                  />
+                  <Password
+                    lab={'confirm password'}
+                    id={'confirmPassword'}
+                    onChange={(value: React.SetStateAction<string>) => setConfirmPassword(value)}
+                  />
+
+                  {/* <TextField
+                    // error={}
+                    margin="normal"
+                    required
+                    fullWidth
+                    name="password"
+                    label="Password"
+                    type={isPassword ? 'password' : 'text'}
+                    id="password"
+                    onChange={(val) => {
+                      setPassword(val.currentTarget.value);
+                    }}
+                    error={password?.length < 8}
+                    helperText={password?.length < 8 ? 'Password must be more than eight characters' : ''}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start" onClick={() => setIsPassword(!isPassword)}>
+                          {isPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                        </InputAdornment>
+                      ),
+                    }}
+                    autoComplete="current-password"
+                  />
+                  <TextField
+                    // error={}
+                    margin="normal"
+                    required
+                    fullWidth
+                    name="Confirm password"
+                    label="Confirm password"
+                    type={isConfirmPassword ? 'password' : 'text'}
+                    id="confirmPassword"
+                    onChange={(val) => {
+                      setConfirmPassword(val.currentTarget.value);
+                    }}
+                    error={confirmPassword?.length < 8}
+                    helperText={confirmPassword?.length < 8 ? 'Password must be more than eight characters' : ''}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start" onClick={() => setIsConfirmPassword(!isConfirmPassword)}>
+                          {isConfirmPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                        </InputAdornment>
+                      ),
+                    }}
+                    autoComplete="current-password"
+                  /> */}
+                  <Rule
+                    onChange={(value: React.SetStateAction<string>) => {
+                      console.log(value);
+                      setRule(value);
+                    }}
+                  />
+                  <Button
+                    onClick={handleSubmit}
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    sx={{ mt: 3, mb: 2, height: '60px' }}
+                  >
+                    Sign Up
+                  </Button>
+                  <Grid container>
+                    <Grid item>
+                      <Link href="/login" variant="body2">
+                        {'Do you have an account? Sign in'}
+                      </Link>
+                    </Grid>
                   </Grid>
-                </Grid>
+                </Box>
               </Box>
-            </Box>
             </Grid>
           </Grid>
-          </Grid>
-    
         </Grid>
-      </ThemeProvider>);
+      </Grid>
+    </ThemeProvider>
+  );
 }
