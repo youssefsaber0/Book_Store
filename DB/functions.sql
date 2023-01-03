@@ -5,8 +5,7 @@ DELIMITER $$
 CREATE DEFINER=`root`@`localhost` FUNCTION `IS_MANAGER`(email_in VARCHAR(45)) RETURNS tinyint(1)
     DETERMINISTIC
 BEGIN 
-
-    DECLARE urole ENUM('admin','custumer');
+    DECLARE urole ENUM('admin','customer');
     SELECT role INTO urole FROM user WHERE email = email_in;
     IF (urole = 'admin') THEN 
         RETURN TRUE;

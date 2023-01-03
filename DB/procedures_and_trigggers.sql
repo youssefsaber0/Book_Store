@@ -1,5 +1,5 @@
 DELIMITER //
-create procedure add_book(isbn varchar(13), title varchar(255), category int, publication_year int, stock int, threshold int, price double, publisher_name varchar(50))
+create procedure add_book(isbn varchar(17), title varchar(255), category int, publication_year int, stock int, threshold int, price double, publisher_name varchar(50))
 BEGIN
     insert into book 
     values(isbn, title, category, publication_year, stock, threshold, price, publisher_name);
@@ -18,7 +18,7 @@ END
 //
 
 DELIMITER //
-create procedure dec_book_quantity_by(book_isbn varchar(13), val int)
+create procedure dec_book_quantity_by(book_isbn varchar(17), val int)
 BEGIN
 	update book set stock = stock - val where isbn = book_isbn;
 END
@@ -46,7 +46,7 @@ END
 //
 
 DELIMITER // 
-create procedure get_book_by_id(book_isbn varchar(13))
+create procedure get_book_by_id(book_isbn varchar(17))
 BEGIN
 	select * from book where isbn = book_isbn;
 END
