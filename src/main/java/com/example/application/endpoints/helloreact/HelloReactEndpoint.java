@@ -9,6 +9,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
+import com.example.application.DTO.AddToCartRequest;
 import com.example.application.DTO.SignUpRequest;
 import com.example.application.security.UserInfo;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -41,6 +42,28 @@ public class HelloReactEndpoint {
         } catch (Exception e) {
             e.printStackTrace();
             return "Error";
+        }
+    }
+
+    @Nonnull
+    public boolean addToCart(@Nonnull AddToCartRequest request) {
+        try {
+            int userId = getUserId();
+            String isbn = request.isbn();
+            int quantity = request.quantity();
+            final String isItemInCartSql = "SELECT COUNT(*) FROM CART WHERE user_id = ? AND isbn = ?;";
+            final String addToCartSql = "INSERT INTO CART (user_id, isbn, qty) VALUES (?, ?, ?);";
+            final String updateCartSql = "UPDATE CART SET qty = qty + ? WHERE user_id = ? AND isbn = ?;";
+            boolean isItemInCart = jdbcTemplate.queryForObject(isItemInCartSql, Boolean.class, new Object[] { userId, isbn });
+            if (isItemInCart) {
+                jdbcTemplate.update(updateCartSql, new Object[] { quantity, userId, isbn });
+            } else {
+                jdbcTemplate.update(addToCartSql, new Object[] { userId, isbn, quantity });
+            }
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
         }
     }
 

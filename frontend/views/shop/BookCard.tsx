@@ -4,7 +4,8 @@ import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Stack from '@mui/material/Stack';
-import Select from '@mui/material/Select';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import { HelloReactEndpoint } from 'Frontend/generated/endpoints';
 import type { SxProps } from '@mui/material';
 
 interface BookCardProps {
@@ -18,6 +19,27 @@ interface BookCardProps {
 }
 
 export default function BookCard(props: BookCardProps) {
+  const [quantity, setQuantity] = React.useState<number>(1);
+  const [addingState, setAddingState] = React.useState<number>(0);
+
+  const handleQuantityChange = (event: SelectChangeEvent<number>) => {
+    setQuantity(event.target.value as number);
+  };
+
+  const handleAddToCart = () => {
+    setAddingState(1);
+    HelloReactEndpoint.addToCart({ isbn: props.isbn, quantity })
+      .then((response) => {
+        setAddingState(2);
+      })
+      .catch((error) => {
+        setAddingState(3);
+        setTimeout(() => {
+          setAddingState(0);
+        }, 3000);
+      });
+  };
+
   return (
     <Card sx={{ width: '100%', ...props.sx }}>
       <CardContent sx={{ '&:last-child': { pb: 2 } }}>
@@ -52,7 +74,7 @@ export default function BookCard(props: BookCardProps) {
                 <Typography fontSize={14} color={'grey.600'}>
                   Quantity:
                 </Typography>
-                <Select native defaultValue={1} size="small">
+                <Select native defaultValue={1} size="small" onChange={handleQuantityChange}>
                   {[...Array(Math.min(props.stock, 20)).keys()].map((i) => (
                     <option key={i} value={i + 1}>
                       {i + 1}
@@ -60,8 +82,22 @@ export default function BookCard(props: BookCardProps) {
                   ))}
                 </Select>
               </Stack>
-              <Button variant="contained" size="large">
-                Add to Cart
+              <Button
+                variant="contained"
+                size="large"
+                onClick={handleAddToCart}
+                disabled={addingState > 0}
+                color={
+                  addingState === 0 ? 'primary' : addingState === 1 ? 'info' : addingState === 2 ? 'success' : 'error'
+                }
+              >
+                {addingState === 0
+                  ? 'Add to cart'
+                  : addingState === 1
+                  ? 'Adding...'
+                  : addingState === 2
+                  ? 'Added'
+                  : 'Error'}
               </Button>
             </Stack>
           )}
