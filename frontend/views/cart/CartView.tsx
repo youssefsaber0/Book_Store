@@ -20,6 +20,11 @@ export default function ShopView() {
       });
   };
 
+  const handleItemRemove = (isbn: string) => {
+    books.splice(books.findIndex((book) => book.isbn === isbn), 1);
+    setBooks([...books]);
+  };
+
   React.useEffect(() => {
     fetchBooks();
   }, []);
@@ -29,9 +34,11 @@ export default function ShopView() {
       {books.map((book) => (
         <BookCart
           key={book.isbn}
+          isbn={book.isbn}
           title={book.title}
           price={book.price}
           quantity={book.quantity}
+          onRemove={handleItemRemove}
           sx={{ flex: 2 }}
         />
       ))}

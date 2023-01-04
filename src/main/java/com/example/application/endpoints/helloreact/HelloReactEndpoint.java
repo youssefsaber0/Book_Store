@@ -163,6 +163,7 @@ public class HelloReactEndpoint {
         }
     }
 
+    @Nonnull
     public String getCartItems() {
         try {
             final int userId = getUserId();
@@ -175,6 +176,18 @@ public class HelloReactEndpoint {
             return "Error";
         }
     }
+
+    public void removeCartItem(@Nonnull String isbn) {
+        try {
+            final int userId = getUserId();
+            final String sql = "DELETE FROM CART WHERE user_id = ? AND isbn = ?;";
+            jdbcTemplate.update(sql, new Object[] { userId, isbn });
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Error("Error");
+        }
+    }
+
 
     @Nonnull
     public boolean register(@Nonnull SignUpRequest req) {
