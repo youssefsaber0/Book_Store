@@ -2,6 +2,7 @@ import MainLayout from 'Frontend/views/MainLayout.js';
 import { lazy, Suspense } from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 import AddBook from './views/add_book/AddBook';
+import DownloadReport from './views/download_report/download_report';
 import EditBooks from './views/edit_books/EditBooks';
 import OrderView from './views/order/Order';
 import Promote from './views/promote/Promote';
@@ -59,6 +60,14 @@ const router = createBrowserRouter([
         element: (
           <Suspense fallback={<div>Loading...</div>}>
             <EditBooks />
+          </Suspense>
+        ),
+      },
+      {
+        path: '/DownloadReport',
+        element: (
+          <Suspense fallback={<div>Loading...</div>}>
+            <DownloadReport />
           </Suspense>
         ),
       },
