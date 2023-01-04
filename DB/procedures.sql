@@ -57,7 +57,7 @@ begin
 	-- error handling and rollback
  	DECLARE exit handler for sqlexception
  	   BEGIN
- 		select concat('ROLLBACKED in checkout');
+ 		select concat('ERROR');
  	   ROLLBACK;
  	END;
 	start transaction;
