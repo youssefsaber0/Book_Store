@@ -1,7 +1,6 @@
 import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
 import TextField, { TextFieldProps } from '@mui/material/TextField';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
@@ -12,8 +11,6 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Autocomplete, InputAdornment, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { useState } from 'react';
-import { width } from '@mui/system';
-import { getAllPublishers } from 'Frontend/generated/HelloReactEndpoint';
 import { HelloReactEndpoint } from 'Frontend/generated/endpoints';
 
 const theme = createTheme();

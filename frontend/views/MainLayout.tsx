@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Outlet, useLocation } from 'react-router-dom';
+import { Link, Outlet, useLocation } from 'react-router-dom';
 import css from './MainLayout.module.css';
 import { CssBaseline } from '@mui/material';
 import * as React from 'react';
@@ -16,6 +16,7 @@ import Container from '@mui/material/Container';
 import Avatar from '@mui/material/Avatar';
 import Tooltip from '@mui/material/Tooltip';
 import BookIcon from '@mui/icons-material/Book';
+import CartIcon from '@mui/icons-material/ShoppingCart';
 import { ThemeProvider as MUIThemeProvider, createTheme, StyledEngineProvider } from '@mui/material/styles';
 import views, { RequiredViewInfoMap } from './views.js';
 
@@ -159,6 +160,11 @@ export default function MenuOnLeftLayout() {
                   </Box>
 
                   <Box sx={{ flexGrow: 0 }}>
+                    <Link to="/cart">
+                      <IconButton sx={{ mr: 1 }} aria-label="show 4 new mails">
+                        <CartIcon sx={{ color: 'white' }} />
+                      </IconButton>
+                    </Link>
                     <Tooltip title="Open settings">
                       <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                         <Avatar alt="Remy Sharp" />
