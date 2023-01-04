@@ -5,6 +5,7 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Stack from '@mui/material/Stack';
 import Select from '@mui/material/Select';
+import type { SxProps } from '@mui/material';
 
 interface BookCardProps {
   title: string;
@@ -13,11 +14,12 @@ interface BookCardProps {
   isbn: string;
   price: number;
   stock: number;
+  sx?: SxProps;
 }
 
 export default function BookCard(props: BookCardProps) {
   return (
-    <Card>
+    <Card sx={{ width: '100%', ...props.sx }}>
       <CardContent sx={{ '&:last-child': { pb: 2 } }}>
         <Stack
           spacing={2}

@@ -15,7 +15,10 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import { InputAdornment } from '@mui/material';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import EmailIcon from '@mui/icons-material/Email';
+import { login } from "Frontend/auth";
+
 const theme = createTheme();
+
 export default function LoginView() {
   const [email, setEmail] = useState<string>();
   const [password, setPassword] = useState<string>('');
@@ -24,11 +27,12 @@ export default function LoginView() {
   const handleSubmit = (event: any) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    if (isEmailValid() && password?.length >= 8) {
+    if (password?.length >= 1 && email) {
       console.log({
         email: email,
         password: password,
       });
+      login(email, password);
     }
   };
   const isEmailValid = () => {

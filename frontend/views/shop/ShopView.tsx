@@ -16,16 +16,18 @@ export default function ShopView() {
 
   const [books, setBooks] = React.useState<BooksResponse[]>([]);
 
-  const handleClick = () => {
+  React.useEffect(() => {
+    HelloReactEndpoint.getUserInfo().then((response) => {
+      console.log(response);
+    });
     HelloReactEndpoint.searchBook(0).then((response) => {
       console.log(JSON.parse(response));
       setBooks(JSON.parse(response));
     });
-  };
+  }, []);
 
   return (
     <Stack maxWidth="xl" spacing={2} alignItems="center">
-      <button type="button" onClick={handleClick}>Test DB</button>
       {books.map((book) => (
         <BookCard
           key={book.isbn}
