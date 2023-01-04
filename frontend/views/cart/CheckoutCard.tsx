@@ -21,13 +21,8 @@ export default function CheckoutCard(props: BookCartProps) {
         </Typography>
 
         <Stack direction="column" spacing={1}>
-          <TextField label="Shipping Address" variant="outlined" />
-          <TextField label="Name on Card" variant="outlined" />
           <TextField label="Card Number" variant="outlined" />
-          <Stack direction="row" justifyContent="space-between" alignItems="center">
-            <TextField label="Expiration Date" variant="outlined" />
-            <TextField label="CVV" variant="outlined" />
-          </Stack>
+          <TextField label="CVV" variant="outlined" />
         </Stack>
 
         <Stack direction="row" justifyContent="space-between" alignItems="center">

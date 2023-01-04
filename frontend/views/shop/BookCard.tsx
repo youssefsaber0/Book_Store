@@ -18,7 +18,7 @@ interface BookCardProps {
 export default function BookCard(props: BookCardProps) {
   return (
     <Card>
-      <CardContent sx={{ '&:last-child': { pb: 2 }}}>
+      <CardContent sx={{ '&:last-child': { pb: 2 } }}>
         <Stack
           spacing={2}
           alignItems="center"
@@ -41,7 +41,7 @@ export default function BookCard(props: BookCardProps) {
             <Stack direction="row" spacing={0.5} alignItems="center">
               <Typography fontSize={24}>${props.price}</Typography>
               <Typography color={props.stock > 0 ? 'green' : 'red'}>•</Typography>
-              <Typography color={props.stock > 0 ? 'green' : 'red'}>in stock</Typography>
+              <Typography color={props.stock > 0 ? 'green' : 'red'}>{props.stock > 0 ? 'in' : 'out'} stock</Typography>
             </Stack>
           </Stack>
           {props.stock > 0 && (
@@ -51,7 +51,7 @@ export default function BookCard(props: BookCardProps) {
                   Quantity:
                 </Typography>
                 <Select native defaultValue={1} size="small">
-                  {[...Array(Math.min(props.stock, 10)).keys()].map((i) => (
+                  {[...Array(Math.min(props.stock, 20)).keys()].map((i) => (
                     <option key={i} value={i + 1}>
                       {i + 1}
                     </option>
