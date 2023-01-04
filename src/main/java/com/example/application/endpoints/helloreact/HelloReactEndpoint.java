@@ -60,7 +60,7 @@ public class HelloReactEndpoint {
     @Nonnull
     public String searchBookByTitle(@Nonnull String keyword, int page) {
         try {
-            final String sql = "SELECT *, (SELECT GROUP_CONCAT(author_name SEPARATOR ', ') FROM AUTHOR WHERE AUTHOR.isbn = BOOK.isbn) AS authors FROM BOOK WHERE title ILIKE ? LIMIT ?, 10;";
+            final String sql = "SELECT *, (SELECT GROUP_CONCAT(author_name SEPARATOR ', ') FROM AUTHOR WHERE AUTHOR.isbn = BOOK.isbn) AS authors FROM BOOK WHERE title LIKE ? LIMIT ?, 10;";
             List<Map<String, Object>> ls = jdbcTemplate.queryForList(sql, new Object[] { "%" + keyword + "%", (page - 1) * 10 });
             final String str = mapper.writeValueAsString(ls);
             return str;
@@ -73,7 +73,7 @@ public class HelloReactEndpoint {
     @Nonnull
     public String searchBookByISBN(@Nonnull String keyword, int page) {
         try {
-            final String sql = "SELECT *, (SELECT GROUP_CONCAT(author_name SEPARATOR ', ') FROM AUTHOR WHERE AUTHOR.isbn = BOOK.isbn) AS authors FROM BOOK WHERE isbn ILIKE ? LIMIT ?, 10;";
+            final String sql = "SELECT *, (SELECT GROUP_CONCAT(author_name SEPARATOR ', ') FROM AUTHOR WHERE AUTHOR.isbn = BOOK.isbn) AS authors FROM BOOK WHERE isbn LIKE ? LIMIT ?, 10;";
             List<Map<String, Object>> ls = jdbcTemplate.queryForList(sql, new Object[] { "%" + keyword + "%", (page - 1) * 10 });
             final String str = mapper.writeValueAsString(ls);
             return str;
@@ -99,7 +99,7 @@ public class HelloReactEndpoint {
     @Nonnull
     public String searchBookByPublisher(@Nonnull String keyword, int page) {
         try {
-            final String sql = "SELECT *, (SELECT GROUP_CONCAT(author_name SEPARATOR ', ') FROM AUTHOR WHERE AUTHOR.isbn = BOOK.isbn) AS authors FROM BOOK WHERE publisher_name ILIKE ? LIMIT ?, 10;";
+            final String sql = "SELECT *, (SELECT GROUP_CONCAT(author_name SEPARATOR ', ') FROM AUTHOR WHERE AUTHOR.isbn = BOOK.isbn) AS authors FROM BOOK WHERE publisher_name LIKE ? LIMIT ?, 10;";
             List<Map<String, Object>> ls = jdbcTemplate.queryForList(sql, new Object[] { "%" + keyword + "%", (page - 1) * 10 });
             final String str = mapper.writeValueAsString(ls);
             return str;
@@ -112,7 +112,7 @@ public class HelloReactEndpoint {
     @Nonnull
     public String searchBookByAuthor(@Nonnull String keyword, int page) {
         try {
-            final String sql = "SELECT *, (SELECT GROUP_CONCAT(author_name SEPARATOR ', ') FROM AUTHOR WHERE AUTHOR.isbn = BOOK.isbn) AS authors FROM BOOK WHERE EXISTS (SELECT * FROM AUTHOR WHERE AUTHOR.isbn = BOOK.isbn AND author_name ILIKE ?) LIMIT ?, 10;";
+            final String sql = "SELECT *, (SELECT GROUP_CONCAT(author_name SEPARATOR ', ') FROM AUTHOR WHERE AUTHOR.isbn = BOOK.isbn) AS authors FROM BOOK WHERE EXISTS (SELECT * FROM AUTHOR WHERE AUTHOR.isbn = BOOK.isbn AND author_name LIKE ?) LIMIT ?, 10;";
             List<Map<String, Object>> ls = jdbcTemplate.queryForList(sql, new Object[] { keyword, (page - 1) * 10 });
             final String str = mapper.writeValueAsString(ls);
             return str;

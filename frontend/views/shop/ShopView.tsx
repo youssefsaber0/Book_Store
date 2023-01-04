@@ -2,6 +2,13 @@ import * as React from 'react';
 import Stack from '@mui/material/Stack';
 import BookCard from './BookCard';
 import { HelloReactEndpoint } from 'Frontend/generated/endpoints';
+import FilledInput from '@mui/material/FilledInput';
+import FormControl from '@mui/material/FormControl';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import InputAdornment from '@mui/material/InputAdornment';
+import SearchIcon from '@mui/icons-material/Search';
+import InputLabel from '@mui/material/InputLabel';
+import { TextField } from '@mui/material';
 
 interface BooksResponse {
   isbn: string;
@@ -15,19 +22,73 @@ interface BooksResponse {
 export default function ShopView() {
 
   const [books, setBooks] = React.useState<BooksResponse[]>([]);
+  const [keyword, setKeyword] = React.useState<string>('');
+  const [criteria, setCriteria] = React.useState<string>('title');
+  const [page, setPage] = React.useState<number>(1);
 
-  React.useEffect(() => {
-    HelloReactEndpoint.getUserInfo().then((response) => {
-      console.log(response);
-    });
-    HelloReactEndpoint.getAllBooks(1).then((response) => {
+  const searchBooks = () => {
+    const bookPromise = keyword === ''
+      ? HelloReactEndpoint.getAllBooks(page)
+      : criteria === 'title'
+      ? HelloReactEndpoint.searchBookByTitle(keyword, page)
+      : criteria === 'author'
+      ? HelloReactEndpoint.searchBookByAuthor(keyword, page)
+      : criteria === 'publisher'
+      ? HelloReactEndpoint.searchBookByPublisher(keyword, page)
+      : HelloReactEndpoint.searchBookByISBN(keyword, page);
+
+    bookPromise.then((response) => {
       console.log(JSON.parse(response));
       setBooks(JSON.parse(response));
     });
+  };
+
+  const handleKeyDown = (event: React.KeyboardEvent) => {
+    if (event.key === 'Enter') {
+      searchBooks();
+    }
+  };
+
+  const handleCriteriaChange = (event: SelectChangeEvent) => {
+    setCriteria(event.target.value as string);
+  };
+
+  const handleKeywordChange = (event: React.ChangeEvent<{ value: string }>) => {
+    setKeyword(event.target.value as string);
+  };
+
+  React.useEffect(() => {
+    searchBooks();
   }, []);
 
   return (
     <Stack maxWidth="xl" spacing={2} alignItems="center">
+      <Stack direction="row" spacing={2} alignItems="center" sx={{ width: '100%' }}>
+        <TextField
+          id="book-search"
+          hiddenLabel
+          placeholder='Search'
+          variant="filled"
+          size='small'
+          sx={{ flex: 1 }}
+          onChange={handleKeywordChange}
+          onKeyDown={handleKeyDown}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon />
+              </InputAdornment>
+            ),
+          }}
+        />
+        <Select native defaultValue="title" size="small" onChange={handleCriteriaChange}>
+          <option value="title">title</option>
+          <option value="author">author</option>
+          <option value="publisher">publisher</option>
+          <option value="isbn">isbn</option>
+        </Select>
+
+      </Stack>
       {books.map((book) => (
         <BookCard
           key={book.isbn}
