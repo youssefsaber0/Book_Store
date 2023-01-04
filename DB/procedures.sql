@@ -50,16 +50,16 @@ END $$
 DELIMITER 
 
 DELIMITER $$
-create procedure checkout_cart(userId int, card_no int)
+create procedure checkout_cart(userId int, card_no varchar(16))
 begin
 	declare last_id int;
 
 	-- error handling and rollback
  	DECLARE exit handler for sqlexception
- 	   BEGIN
- 		select concat('ROLLBACKED in checkout');
- 	   ROLLBACK;
- 	END;
+		BEGIN
+			select false
+			ROLLBACK;
+		END;
 	start transaction;
 		-- insert the info
         insert into bookstore.checkout_info(user_id,credit_card,date_out) 
@@ -84,30 +84,8 @@ begin
         
         -- delete from cart
 		delete from bookstore.cart as c where c.user_id = userId;
-    commit;
+	
+		select true
+	commit;
 end$$
 DELIMITER 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
