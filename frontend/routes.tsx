@@ -24,7 +24,7 @@ const router = createBrowserRouter([
         element: <SignupView />,
       },
       {
-        path: '/shop',
+        path: '/',
         element: <ShopView />,
       },
       {
