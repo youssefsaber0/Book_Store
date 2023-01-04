@@ -3,25 +3,40 @@ import Stack from '@mui/material/Stack';
 import BookCard from './BookCard';
 import { HelloReactEndpoint } from 'Frontend/generated/endpoints';
 
+interface BooksResponse {
+  isbn: string;
+  title: string;
+  author: string;
+  publication_year: string;
+  price: number;
+  stock: number;
+}
+
 export default function ShopView() {
 
+  const [books, setBooks] = React.useState<BooksResponse[]>([]);
+
   const handleClick = () => {
-    HelloReactEndpoint.testDBQuery().then((response) => {
-      console.log(JSON.parse(response).map((row: string) => JSON.parse(row)));
+    HelloReactEndpoint.searchBook(0).then((response) => {
+      console.log(JSON.parse(response));
+      setBooks(JSON.parse(response));
     });
   };
 
   return (
     <Stack maxWidth="xl" spacing={2} alignItems="center">
       <button type="button" onClick={handleClick}>Test DB</button>
-      <BookCard
-        title="The Complete Guide To Blender Graphics: Computer Modeling And Animation"
-        authors={['John M. Blain']}
-        publisher="Packt Publishing"
-        isbn="978-1-78439-534-2"
-        price={29.99}
-        stock={10}
-      />
+      {books.map((book) => (
+        <BookCard
+          key={book.isbn}
+          title={book.title}
+          authors={book.author.split(',')}
+          publisher={book.publication_year}
+          isbn={book.isbn}
+          price={book.price}
+          stock={book.stock}
+        />
+      ))}
     </Stack>
   );
 }

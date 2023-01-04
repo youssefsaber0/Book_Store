@@ -40,4 +40,16 @@ public class HelloReactEndpoint {
             return "Error";
         }
     }
+
+    @Nonnull
+    public String searchBook(@Nonnull int page) {
+        try {
+            List<Map<String, Object>> ls = jdbcTemplate.queryForList("SELECT  ANY_VALUE(b.isbn) isbn, ANY_VALUE(b.title) title, ANY_VALUE(b.publication_year) publication_year, ANY_VALUE(b.category) category, ANY_VALUE(b.publication_year) publication_year, ANY_VALUE(b.stock) stock, ANY_VALUE(b.price) price, ANY_VALUE(b.publisher_name) publisher_name, GROUP_CONCAT(a.author_name) author FROM BOOK b JOIN AUTHOR a ON FIND_IN_SET(a.isbn, b.isbn) LIMIT " + (page * 30) + ", 30;");   
+            final String str = mapper.writeValueAsString(ls);
+            return str;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Error";
+        }
+    }
 }
