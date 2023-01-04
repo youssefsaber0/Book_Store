@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import { Link, Outlet, useLocation } from 'react-router-dom';
-import css from './MainLayout.module.css';
 import { CssBaseline } from '@mui/material';
 import * as React from 'react';
 import AppBar from '@mui/material/AppBar';
@@ -17,11 +16,11 @@ import Avatar from '@mui/material/Avatar';
 import Tooltip from '@mui/material/Tooltip';
 import BookIcon from '@mui/icons-material/Book';
 import CartIcon from '@mui/icons-material/ShoppingCart';
+import { logout } from "Frontend/auth";
 import { ThemeProvider as MUIThemeProvider, createTheme, StyledEngineProvider } from '@mui/material/styles';
-import views, { RequiredViewInfoMap } from './views.js';
+import views from './views.js';
 
 const pages = ['Products', 'Pricing', 'Blog'];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 export default function MenuOnLeftLayout() {
   const { pathname } = useLocation();
@@ -47,6 +46,12 @@ export default function MenuOnLeftLayout() {
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
+  };
+
+  const handleLogout = () => {
+    logout().then(() => {
+      window.location.href = '/login';
+    });
   };
 
   const theme = createTheme({
@@ -186,11 +191,9 @@ export default function MenuOnLeftLayout() {
                       open={Boolean(anchorElUser)}
                       onClose={handleCloseUserMenu}
                     >
-                      {settings.map((setting) => (
-                        <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                          <Typography textAlign="center">{setting}</Typography>
-                        </MenuItem>
-                      ))}
+                      <MenuItem onClick={handleLogout}>
+                        <Typography textAlign="center">Logout</Typography>
+                      </MenuItem>
                     </Menu>
                   </Box>
                 </Toolbar>
