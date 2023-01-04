@@ -7,47 +7,50 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useState } from 'react';
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import { HelloReactEndpoint } from 'Frontend/generated/endpoints';
 import { Card, FormControl, FormControlLabel, FormLabel, InputAdornment, Radio, RadioGroup } from '@mui/material';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import EmailIcon from '@mui/icons-material/Email';
-const theme = createTheme();
-type ruleProps = {
+
+interface RoleProps {
   onChange: any;
-};
-function Rule({ onChange }: ruleProps) {
+}
+
+function Role({ onChange }: RoleProps) {
   return (
     <FormControl>
       <FormLabel
-        id="Rule"
+        id="Role"
         sx={{
           fontSize: 18,
         }}
       >
-        Rule
+        Role
       </FormLabel>
       <RadioGroup
         row
-        aria-labelledby="Rule"
-        name="row-radio-Rule"
+        aria-labelledby="Role"
+        name="row-radio-Role"
         onChange={(event) => {
           onChange(event.target.value);
         }}
       >
-        <FormControlLabel value="user" control={<Radio />} label="user" />
-        <FormControlLabel value="Admin" control={<Radio />} label="Admin" />
+        <FormControlLabel value="user" control={<Radio />} label="Customer" />
+        <FormControlLabel value="admin" control={<Radio />} label="Admin" />
       </RadioGroup>
     </FormControl>
   );
 }
-type passwordProps = {
+
+interface PasswordProps {
   lab: String;
   id: string;
   onChange: any;
 };
-export function Password({ lab, id, onChange }: passwordProps) {
+
+export function Password({ lab, id, onChange }: PasswordProps) {
   const [password, setPassword] = useState<string>('');
   const [isPassword, setIsPassword] = useState<boolean>(true);
   return (
@@ -81,14 +84,27 @@ export default function SignupView() {
   const [email, setEmail] = useState<string>();
   const [password, setPassword] = useState<string>('');
   const [confirmPassword, setConfirmPassword] = useState<string>('');
-  const [rule, setRule] = useState<string>('');
+  const [role, setRole] = useState<string>('');
 
   const handleSubmit = () => {
-    if (isEmailValid() && password.length >= 8 && confirmPassword === password && rule.length > 0) {
+    if (isEmailValid() && password.length >= 8 && confirmPassword === password && role.length > 0 && email) {
       console.log({
         email: email,
         password: password,
-        rule: rule,
+        role: role,
+      });
+      HelloReactEndpoint.register({
+        firstName: 'Joe',
+        lastName: 'Doe',
+        email: email,
+        password: password,
+        role: role,
+        shippingAddress: '1234 Main St',
+        phoneNumber: '0123456789',
+      }).then((res) => {
+        if (res) {
+          window.location.href = '/login';
+        }
       });
     }
   };
@@ -184,10 +200,10 @@ export default function SignupView() {
                   id={'confirmPassword'}
                   onChange={(value: React.SetStateAction<string>) => setConfirmPassword(value)}
                 />
-                <Rule
+                <Role
                   onChange={(value: React.SetStateAction<string>) => {
                     console.log(value);
-                    setRule(value);
+                    setRole(value);
                   }}
                 />
                 <Button

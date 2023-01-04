@@ -9,6 +9,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
+import com.example.application.DTO.SignUpRequest;
 import com.example.application.security.UserInfo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
@@ -44,10 +45,10 @@ public class HelloReactEndpoint {
     }
 
     @Nonnull
-    public String searchBook(@Nonnull int page) {
+    public String getAllBooks(int page) {
         try {
-            final String sql = "SELECT *, (SELECT GROUP_CONCAT(author_name SEPARATOR ', ') FROM AUTHOR WHERE AUTHOR.isbn = BOOK.isbn) AS authors FROM BOOK LIMIT ?, 30;";
-            List<Map<String, Object>> ls = jdbcTemplate.queryForList(sql, new Object[] { page });
+            final String sql = "SELECT *, (SELECT GROUP_CONCAT(author_name SEPARATOR ', ') FROM AUTHOR WHERE AUTHOR.isbn = BOOK.isbn) AS authors FROM BOOK LIMIT ?, 10;";
+            List<Map<String, Object>> ls = jdbcTemplate.queryForList(sql, new Object[] { (page - 1) * 10 });
             final String str = mapper.writeValueAsString(ls);
             return str;
         } catch (Exception e) {
@@ -57,11 +58,101 @@ public class HelloReactEndpoint {
     }
 
     @Nonnull
-    public boolean register(@Nonnull String username, @Nonnull String password) {
+    public String searchBookByTitle(@Nonnull String keyword, int page) {
         try {
-            final String sql = "INSERT INTO USER (first_name, last_name, email, password, role, shipping_address, phone_number, reg_date) VALUES (?, ?, ?, ?, ?, ?, ?, NOW());";
+            final String sql = "SELECT *, (SELECT GROUP_CONCAT(author_name SEPARATOR ', ') FROM AUTHOR WHERE AUTHOR.isbn = BOOK.isbn) AS authors FROM BOOK WHERE title ILIKE ? LIMIT ?, 10;";
+            List<Map<String, Object>> ls = jdbcTemplate.queryForList(sql, new Object[] { "%" + keyword + "%", (page - 1) * 10 });
+            final String str = mapper.writeValueAsString(ls);
+            return str;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Error";
+        }
+    }
+
+    @Nonnull
+    public String searchBookByISBN(@Nonnull String keyword, int page) {
+        try {
+            final String sql = "SELECT *, (SELECT GROUP_CONCAT(author_name SEPARATOR ', ') FROM AUTHOR WHERE AUTHOR.isbn = BOOK.isbn) AS authors FROM BOOK WHERE isbn ILIKE ? LIMIT ?, 10;";
+            List<Map<String, Object>> ls = jdbcTemplate.queryForList(sql, new Object[] { "%" + keyword + "%", (page - 1) * 10 });
+            final String str = mapper.writeValueAsString(ls);
+            return str;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Error";
+        }
+    }
+
+    @Nonnull
+    public String searchBookByPublicationYear(@Nonnull String keyword, int page) {
+        try {
+            final String sql = "SELECT *, (SELECT GROUP_CONCAT(author_name SEPARATOR ', ') FROM AUTHOR WHERE AUTHOR.isbn = BOOK.isbn) AS authors FROM BOOK WHERE publication_year = ? LIMIT ?, 10;";
+            List<Map<String, Object>> ls = jdbcTemplate.queryForList(sql, new Object[] { keyword, (page - 1) * 10 });
+            final String str = mapper.writeValueAsString(ls);
+            return str;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Error";
+        }
+    }
+
+    @Nonnull
+    public String searchBookByPublisher(@Nonnull String keyword, int page) {
+        try {
+            final String sql = "SELECT *, (SELECT GROUP_CONCAT(author_name SEPARATOR ', ') FROM AUTHOR WHERE AUTHOR.isbn = BOOK.isbn) AS authors FROM BOOK WHERE publisher_name ILIKE ? LIMIT ?, 10;";
+            List<Map<String, Object>> ls = jdbcTemplate.queryForList(sql, new Object[] { "%" + keyword + "%", (page - 1) * 10 });
+            final String str = mapper.writeValueAsString(ls);
+            return str;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Error";
+        }
+    }
+
+    @Nonnull
+    public String searchBookByAuthor(@Nonnull String keyword, int page) {
+        try {
+            final String sql = "SELECT *, (SELECT GROUP_CONCAT(author_name SEPARATOR ', ') FROM AUTHOR WHERE AUTHOR.isbn = BOOK.isbn) AS authors FROM BOOK WHERE EXISTS (SELECT * FROM AUTHOR WHERE AUTHOR.isbn = BOOK.isbn AND author_name ILIKE ?) LIMIT ?, 10;";
+            List<Map<String, Object>> ls = jdbcTemplate.queryForList(sql, new Object[] { keyword, (page - 1) * 10 });
+            final String str = mapper.writeValueAsString(ls);
+            return str;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Error";
+        }
+    }
+
+    @Nonnull
+    public String searchBookByCategory(int keyword, int page) {
+        try {
+            final String sql = "SELECT *, (SELECT GROUP_CONCAT(author_name SEPARATOR ', ') FROM AUTHOR WHERE AUTHOR.isbn = BOOK.isbn) AS authors FROM BOOK WHERE category = ? LIMIT ?, 10;";
+            List<Map<String, Object>> ls = jdbcTemplate.queryForList(sql, new Object[] { keyword, (page - 1) * 10 });
+            final String str = mapper.writeValueAsString(ls);
+            return str;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Error";
+        }
+    }
+
+    @Nonnull
+    public boolean register(@Nonnull SignUpRequest req) {
+        try {
+            final String firstName = req.firstName();
+            final String lastName = req.lastName();
+            final String email = req.email();
+            final String password = req.password();
+            final String role = req.role();
+            final String shippingAddress = req.shippingAddress();
+            final String phoneNumber = req.phoneNumber();
+            final String isEmailExistsSql = "SELECT COUNT(*) FROM USER WHERE email = ?;";
+            final String registerSql = "INSERT INTO USER (first_name, last_name, email, password, role, shipping_address, phone_number) VALUES (?, ?, ?, ?, ?, ?, ?);";
+            final boolean isEmailExists = jdbcTemplate.queryForObject(isEmailExistsSql, Integer.class, new Object[] { email }) > 0;
+            if (isEmailExists) {
+                return false;
+            }
             final String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
-            jdbcTemplate.update(sql, new Object[] { username, "", username, hashedPassword, "admin", "", "" });
+            jdbcTemplate.update(registerSql, new Object[] { firstName, lastName, email, hashedPassword, role, shippingAddress, phoneNumber });
             return true;
         } catch (Exception e) {
             e.printStackTrace();

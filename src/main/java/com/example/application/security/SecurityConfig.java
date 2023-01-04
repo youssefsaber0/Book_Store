@@ -26,7 +26,8 @@ public class SecurityConfig extends VaadinWebSecurityConfigurerAdapter {
     super.configure(http);
     setLoginView(http, "/login");
     // use a form based login
-    http.formLogin();
+    http.formLogin().loginPage("/login").permitAll()
+        .and().formLogin().loginPage("/signup").permitAll();
   }
 
   @Override

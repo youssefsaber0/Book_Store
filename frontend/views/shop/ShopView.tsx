@@ -20,7 +20,7 @@ export default function ShopView() {
     HelloReactEndpoint.getUserInfo().then((response) => {
       console.log(response);
     });
-    HelloReactEndpoint.searchBook(0).then((response) => {
+    HelloReactEndpoint.getAllBooks(1).then((response) => {
       console.log(JSON.parse(response));
       setBooks(JSON.parse(response));
     });
