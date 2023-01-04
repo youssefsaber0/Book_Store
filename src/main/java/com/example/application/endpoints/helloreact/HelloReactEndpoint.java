@@ -10,6 +10,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
 import com.example.application.DTO.SignUpRequest;
+import com.example.application.DTO.AddBookRequest;
+
 import com.example.application.security.UserInfo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
@@ -33,14 +35,14 @@ public class HelloReactEndpoint {
     }
 
     @Nonnull
-    public String testDBQuery() {
+    public List<Map<String, Object>> getBooks() {
         try {
             List<Map<String, Object>> ls = jdbcTemplate.queryForList("select * from BOOK");
-            final String str = mapper.writeValueAsString(ls);
-            return str;
+           
+            return ls;
         } catch (Exception e) {
             e.printStackTrace();
-            return "Error";
+            return null;
         }
     }
 
@@ -175,5 +177,63 @@ public class HelloReactEndpoint {
             (String) ls.get("phone_number")
         );
         return userInfo;
+    }
+    @Nonnull
+        public List<Map<String, Object>> getAllPublishers( ) {
+         try {
+            List<Map<String, Object>> ls = jdbcTemplate.queryForList("select * from publisher");
+            // final String str = mapper.writeValueAsString(ls);
+            return ls;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    @Nonnull
+        public boolean AddBookRequest(@Nonnull AddBookRequest addBookRequest) {
+         System.out.println(addBookRequest.publisher());
+
+            try {
+            int category =0;
+            switch(addBookRequest.category()){
+                case "Science":
+                    category=1;
+                    break;
+                case "Art":
+                    category=2;
+                    break;
+                case "Religion":
+                    category=3;
+                    break;
+                case "History":
+                    category=4;
+                    break;
+                case "Geography":
+                    category=5;
+                    break;
+            }
+            // isbn varchar(17), title varchar(255), category int, publication_year int, stock int, threshold int, price double, publisher_name varchar(50)
+            jdbcTemplate.update("CALL add_book(?,?,?,?,?,?,?,?)", 
+            addBookRequest.isbn(),
+            addBookRequest.title(),
+            category,
+            addBookRequest.publishYear(),
+            addBookRequest.numberOfCopies(),
+            addBookRequest.threshhold(),
+            addBookRequest.price(),
+            addBookRequest.publisher()
+            );
+                                 final String authorSql = "INSERT INTO author VALUES ( ?, ?);";
+
+         String [] authors= addBookRequest.authors();
+         for (int i = 0; i < authors.length; i++) {
+                        jdbcTemplate.update(authorSql, new Object[] { addBookRequest.isbn(), authors[i]});
+
+         }
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }

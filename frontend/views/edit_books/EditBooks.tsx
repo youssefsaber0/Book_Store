@@ -6,6 +6,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Button, Grid, InputAdornment, TextField } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { useEffect, useState } from 'react';
+import { HelloReactEndpoint } from 'Frontend/generated/endpoints';
 
 type userProps = {
   title: string;
@@ -39,26 +40,42 @@ function Book({ title, ISBN }: userProps) {
   );
 }
 export default function EditBooks() {
-  const books = [
-    { ISBN: '55561221224', title: 'aadas', numOfCopies: 5 },
-    { ISBN: '55651221224', title: 'aadas', numOfCopies: 5 },
-    { ISBN: '5551921224', title: 'aadas', numOfCopies: 5 },
-    { ISBN: '551521224', title: 'aadas', numOfCopies: 5 },
-    { ISBN: '5515221224', title: 'aadas', numOfCopies: 5 },
-    { ISBN: '551228224', title: 'aadas', numOfCopies: 5 },
-    { ISBN: '551227224', title: 'aadas', numOfCopies: 5 },
-    { ISBN: '551225224', title: 'aadas', numOfCopies: 5 },
-    { ISBN: '551221221', title: 'aadas', numOfCopies: 5 },
-  ];
-  const [showBooks, setShowBooks] = useState<any>();
+  // const books = [
+  //   { ISBN: '55561221224', title: 'aadas', numOfCopies: 5 },
+  //   { ISBN: '55651221224', title: 'aadas', numOfCopies: 5 },
+  //   { ISBN: '5551921224', title: 'aadas', numOfCopies: 5 },
+  //   { ISBN: '551521224', title: 'aadas', numOfCopies: 5 },
+  //   { ISBN: '5515221224', title: 'aadas', numOfCopies: 5 },
+  //   { ISBN: '551228224', title: 'aadas', numOfCopies: 5 },
+  //   { ISBN: '551227224', title: 'aadas', numOfCopies: 5 },
+  //   { ISBN: '551225224', title: 'aadas', numOfCopies: 5 },
+  //   { ISBN: '551221221', title: 'aadas', numOfCopies: 5 },
+  // ];
+  const [books, setBooks] = useState<any>([]);
+  const [showBooks, setShowBooks] = useState<any>([]);
 
   useEffect(() => {
+    setShowBooks([]);
+    setBooks([]);
+    HelloReactEndpoint.getBooks().then((res) => {
+      console.log(res);
+      // (old) => [...old, ...newArrayData];
+
+      res.map((val) => {
+        setBooks([...books, { ISBN: val?.isbn, title: val?.title }]);
+        console.log({ ISBN: val?.isbn, title: val?.title });
+      });
+      // setBooks(res);
+      // .then((e) => );
+      console.log(books);
+      setShowBooks(books);
+    });
+
     // change background color with a random color
-    setShowBooks(books);
   }, []);
   function filterBooks(value: string) {
-    console.log(books.filter((book) => book['ISBN'].includes(value)));
-    setShowBooks(books.filter((book) => book['ISBN'].includes(value)));
+    console.log(books?.filter((book: any) => book.ISBN.includes(value)));
+    setShowBooks(books?.filter((book: any) => book.ISBN.includes(value)));
   }
   return (
     <Grid>

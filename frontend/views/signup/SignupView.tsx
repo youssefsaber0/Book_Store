@@ -37,7 +37,7 @@ function Role({ onChange }: RoleProps) {
           onChange(event.target.value);
         }}
       >
-        <FormControlLabel value="user" control={<Radio />} label="Customer" />
+        <FormControlLabel value="customer" control={<Radio />} label="Customer" />
         <FormControlLabel value="admin" control={<Radio />} label="Admin" />
       </RadioGroup>
     </FormControl>
@@ -48,7 +48,7 @@ interface PasswordProps {
   lab: String;
   id: string;
   onChange: any;
-};
+}
 
 export function Password({ lab, id, onChange }: PasswordProps) {
   const [password, setPassword] = useState<string>('');
@@ -81,10 +81,15 @@ export function Password({ lab, id, onChange }: PasswordProps) {
   );
 }
 export default function SignupView() {
+  const [firstName, setFirstName] = useState<string>('');
+  const [lastName, setLastName] = useState<string>('');
+
   const [email, setEmail] = useState<string>();
   const [password, setPassword] = useState<string>('');
   const [confirmPassword, setConfirmPassword] = useState<string>('');
   const [role, setRole] = useState<string>('');
+  const [shippingAddress, setShippingAddress] = useState<string>('');
+  const [phoneNumber, setPhoneNumber] = useState<string>('');
 
   const handleSubmit = () => {
     if (isEmailValid() && password.length >= 8 && confirmPassword === password && role.length > 0 && email) {
@@ -94,13 +99,13 @@ export default function SignupView() {
         role: role,
       });
       HelloReactEndpoint.register({
-        firstName: 'Joe',
-        lastName: 'Doe',
+        firstName: firstName,
+        lastName: lastName,
         email: email,
         password: password,
         role: role,
-        shippingAddress: '1234 Main St',
-        phoneNumber: '0123456789',
+        shippingAddress: shippingAddress,
+        phoneNumber: phoneNumber,
       }).then((res) => {
         if (res) {
           window.location.href = '/login';
@@ -156,6 +161,7 @@ export default function SignupView() {
                   id="firstName"
                   label="First name"
                   name="first name"
+                  onChange={(e) => setFirstName(e.currentTarget.value)}
                   autoFocus
                 />
                 <TextField
@@ -166,6 +172,7 @@ export default function SignupView() {
                   label="Last name"
                   name="Last name"
                   sx={{ display: 'inline-flex', width: '50%' }}
+                  onChange={(e) => setLastName(e.currentTarget.value)}
                   autoFocus
                 />
                 <TextField
@@ -188,6 +195,30 @@ export default function SignupView() {
                   autoComplete="email"
                   error={!isEmailValid()}
                   helperText={!isEmailValid() ? 'Not valid email' : ''}
+                  autoFocus
+                />
+                <TextField
+                  margin="normal"
+                  required
+                  fullWidth
+                  id="phoneNumber"
+                  label="Phone Number"
+                  onChange={(e) => {
+                    setPhoneNumber(e.currentTarget.value);
+                  }}
+                  name="phoneNumber"
+                  autoFocus
+                />
+                <TextField
+                  margin="normal"
+                  required
+                  fullWidth
+                  id="shippingAddress"
+                  label="Shipping Address"
+                  onChange={(e) => {
+                    setShippingAddress(e.currentTarget.value);
+                  }}
+                  name="shippingAddress"
                   autoFocus
                 />
                 <Password

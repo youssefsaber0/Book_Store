@@ -13,6 +13,8 @@ import { Autocomplete, InputAdornment, InputLabel, MenuItem, Select, SelectChang
 import AddIcon from '@mui/icons-material/Add';
 import { useState } from 'react';
 import { width } from '@mui/system';
+import { getAllPublishers } from 'Frontend/generated/HelloReactEndpoint';
+import { HelloReactEndpoint } from 'Frontend/generated/endpoints';
 
 const theme = createTheme();
 type dropProps = {
@@ -53,30 +55,49 @@ export default function AddBook() {
   const [title, setTitle] = useState('');
 
   const [authors, setAuthors] = useState<String[]>();
-  const [pulisher, setPulisher] = useState<any>();
+  const [pulisher, setPulisher] = useState<string>('');
   const [numberOfCopies, setNumberOfCopies] = useState<any>();
   const [threshhold, setThreshhold] = useState<any>();
   const [category, setCategory] = useState('');
 
   const [pulishYear, setPulishYear] = useState<any>();
   const [price, setPrice] = useState<any>();
+  const [publishers, setPublishers] = useState<string[]>([]);
 
   //   const [category, setCategory] = useState('');
+  React.useEffect(() => {
+    setPublishers([]);
+    HelloReactEndpoint.getAllPublishers().then((res) => {
+      console.log(res);
+      // (old) => [...old, ...newArrayData];
 
+      res.map((val) => setPublishers((publishers) => [...publishers, val?.publisher_name]));
+    });
+  }, []);
   var categories = ['Science', 'Art', 'Religion', 'History', 'Geography'];
-  var publishers = ['publisher1', 'publisher2'];
-  function addBopk() {
-    console.log({
+  function addBook() {
+    // console.log({
+    //   isbn: ISBN,
+    //   title: title,
+    //   authors: authors,
+    //   publisher: pulisher,
+    //   numberOfCopies: Number(numberOfCopies),
+    //   threshhold: Number(threshhold),
+    //   categories: category,
+    //   publishYear: pulishYear,
+    //   price: Number(price),
+    // });
+    HelloReactEndpoint.AddBookRequest({
       isbn: ISBN,
       title: title,
-      authors: authors,
+      authors: authors as (string | undefined)[],
       publisher: pulisher,
       numberOfCopies: Number(numberOfCopies),
       threshhold: Number(threshhold),
-      categories: category,
-      publishYear: pulishYear,
+      category: category,
+      publishYear: Number(pulishYear),
       price: Number(price),
-    });
+    }).then((val) => {});
   }
   return (
     <ThemeProvider theme={theme}>
@@ -222,7 +243,7 @@ export default function AddBook() {
                     variant="contained"
                     onClick={() => {
                       console.log(authors);
-                      addBopk();
+                      addBook();
                     }}
                     sx={{
                       display: 'inline-flex',
