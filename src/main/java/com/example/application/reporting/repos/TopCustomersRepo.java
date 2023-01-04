@@ -1,6 +1,5 @@
 package com.example.application.reporting.repos;
 
-import com.example.application.reporting.views.BookSalesView;
 import com.example.application.reporting.views.TopCustomersView;
 import org.springframework.data.jpa.repository.JpaRepository;
 

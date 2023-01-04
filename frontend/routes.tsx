@@ -2,8 +2,9 @@ import MainLayout from 'Frontend/views/MainLayout.js';
 import { lazy, Suspense } from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 import SignupView from './views/signup/SignupView';
-
-const LoginView = lazy(async () => import('Frontend/views/login/LoginView.js'));
+import LoginView from './views/login/LoginView';
+import ShopView from './views/shop/ShopView';
+import CartView from './views/cart/CartView';
 
 const router = createBrowserRouter([
   {
@@ -11,19 +12,19 @@ const router = createBrowserRouter([
     children: [
       {
         path: '/login',
-        element: (
-          <Suspense fallback={<div>Loading...</div>}>
-            <LoginView />
-          </Suspense>
-        ),
+        element: <LoginView />,
       },
       {
         path: '/signup',
-        element: (
-          <Suspense fallback={<div>Loading...</div>}>
-            <SignupView />
-          </Suspense>
-        ),
+        element: <SignupView />,
+      },
+      {
+        path: '/shop',
+        element: <ShopView />,
+      },
+      {
+        path: '/cart',
+        element: <CartView />,
       },
     ],
   },

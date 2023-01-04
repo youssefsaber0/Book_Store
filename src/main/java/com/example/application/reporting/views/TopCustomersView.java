@@ -31,6 +31,6 @@ public class TopCustomersView implements Serializable {
     @Column(name = "email")
     private String email;
 
-    @Column(name = "email")
+    @Column(name = "purchased_books")
     private int purchased_books;
 }

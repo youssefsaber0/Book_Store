@@ -3,8 +3,6 @@ package com.example.application.reporting;
 import com.example.application.reporting.repos.BestSellersRepo;
 import com.example.application.reporting.repos.BookSalesRepo;
 import com.example.application.reporting.repos.TopCustomersRepo;
-import com.example.application.reporting.views.BookSalesView;
-import com.example.application.reporting.views.TopCustomersView;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import net.sf.jasperreports.engine.*;
