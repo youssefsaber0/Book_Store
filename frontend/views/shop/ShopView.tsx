@@ -6,7 +6,7 @@ import { HelloReactEndpoint } from 'Frontend/generated/endpoints';
 interface BooksResponse {
   isbn: string;
   title: string;
-  author: string;
+  authors: string;
   publication_year: string;
   price: number;
   stock: number;
@@ -30,7 +30,7 @@ export default function ShopView() {
         <BookCard
           key={book.isbn}
           title={book.title}
-          authors={book.author.split(',')}
+          authors={book.authors.split(',')}
           publisher={book.publication_year}
           isbn={book.isbn}
           price={book.price}
