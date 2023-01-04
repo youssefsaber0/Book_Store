@@ -14,6 +14,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @ExtendWith(MockitoExtension.class)
@@ -40,7 +41,7 @@ public class reportingServiceTest {
                 new BookSalesView("isbn_0","title_0",9.5,"pub_0",123),
                 new BookSalesView("isbn_1","title_1",9.5,"pub_!",123),
                 new BookSalesView("isbn_2","title_2",9.5,"pub_2",123))));
-        s.generateBookSalesReport("src/main/java/com/example/application/reporting/templates/reports");
+        System.out.println(Arrays.toString(s.generateBookSalesReport("src/main/java/com/example/application/reporting/templates/reports")));
     }
 
     @Test
@@ -49,7 +50,7 @@ public class reportingServiceTest {
                 new BestSellersView("isbn_0","title_0",9.5,"pub_0",123),
                 new BestSellersView("isbn_1","title_1",9.5,"pub_!",123),
                 new BestSellersView("isbn_2","title_2",9.5,"pub_2",123))));
-        s.generateBestSellersReport("src/main/java/com/example/application/reporting/templates/reports");
+        System.out.println(Arrays.toString(s.generateBookSalesReport("src/main/java/com/example/application/reporting/templates/reports")));
     }
 
     @Test
@@ -58,6 +59,6 @@ public class reportingServiceTest {
                 new TopCustomersView(0,"fname_0","lname_0","user_0@gmail.com",123),
                 new TopCustomersView(1,"fname_1","lname_1","user_1@gmail.com",123),
                 new TopCustomersView(2,"fname_2","lname_2","user_2@gmail.com",123))));
-        s.generateTopCustomersReport("src/main/java/com/example/application/reporting/templates/reports");
+        System.out.println(Arrays.toString(s.generateBookSalesReport("src/main/java/com/example/application/reporting/templates/reports")));
     }
 }
