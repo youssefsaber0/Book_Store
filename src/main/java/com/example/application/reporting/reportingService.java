@@ -22,39 +22,37 @@ public class reportingService {
     private BestSellersRepo bestSellersRepo;
 
 
-    public String generateBookSalesReport(String destination_directory) {
-        return makeReport(templateDir + "best_sellers_template.jrxml", bookSalesRepo.findAll(),destination_directory+ "\\book_sales_report.pdf");
+    public byte[] generateBookSalesReport(String destination_directory) {
+        return makeReport(templateDir + "best_sellers_template.jrxml", bookSalesRepo.findAll());
     }
 
-    public String generateBestSellersReport(String destination_directory) {
-        return makeReport(templateDir + "best_sellers_template.jrxml",bestSellersRepo.findAll(),destination_directory + "\\best_sellers_report.pdf");
+    public byte[] generateBestSellersReport(String destination_directory) {
+        return makeReport(templateDir + "best_sellers_template.jrxml",bestSellersRepo.findAll());
     }
 
-    public String generateTopCustomersReport(String destination_directory) {
-        return makeReport(templateDir + "top_customers_template.jrxml", topCustomersRepo.findAll(),destination_directory + "\\top_customers_report.pdf");
+    public byte[] generateTopCustomersReport(String destination_directory) {
+        return makeReport(templateDir + "top_customers_template.jrxml", topCustomersRepo.findAll());
     }
 
 
-    private String makeReport(String template, Collection<?> data, String destination_path){
+    private byte[] makeReport(String template, Collection<?> data){
         try {
-            // Compile the Jasper report from .jrxml to .japser
+            //Compile the Jasper report from .jrxml to .japser
             JasperReport jasperReport = JasperCompileManager
                     .compileReport(template);
-            // Get your data source
+            //make the data source
             JRBeanCollectionDataSource jrBeanCollectionDataSource = new JRBeanCollectionDataSource(data);
 
-            // Fill the report
+            //Fill the report
             JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, null,
                     jrBeanCollectionDataSource);
+            System.out.println("Report was successfully generated");
 
-            // Export the report to a PDF file
-            JasperExportManager.exportReportToPdfFile(jasperPrint,  destination_path);
-
-            System.out.println("Done");
-            return "Report was successfully generated @path= " + template;
+            // Export the report to byte[] of the pdf
+            return JasperExportManager.exportReportToPdf(jasperPrint);
         } catch (Exception e) {
             e.printStackTrace();
-            return "ERROR";
+            return null;
         }
     }
 }
