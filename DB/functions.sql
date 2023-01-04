@@ -101,15 +101,15 @@ CREATE DEFINER=`root`@`localhost` FUNCTION `update_user`(
     role_in enum('admin','customer'),
     address varchar(100) ,
     phone char(11)
-    ) RETURNS varchar(500) CHARSET utf8mb4
+    ) RETURNS BOOLEAN
     DETERMINISTIC
 BEGIN
-DECLARE msg varchar(500);
+
 
 if (SELECT EXISTS(SELECT * from user WHERE email = email_in) = 0) 
-then set msg = concat('Email not found');
+then RETURN FALSE; 
 else
-set msg = concat('Saved');
+
 UPDATE user
 set first_name = first,
     last_name = last,
@@ -120,6 +120,6 @@ set first_name = first,
     phone_number = phone
 WHERE email = email_in;
 end if ;
-return msg;
+return TRUE;
 END $$
 DELIMITER 
