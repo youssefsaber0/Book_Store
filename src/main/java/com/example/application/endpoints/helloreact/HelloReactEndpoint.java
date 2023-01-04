@@ -45,8 +45,7 @@ public class HelloReactEndpoint {
         }
     }
 
-    @Nonnull
-    public boolean addToCart(@Nonnull AddToCartRequest request) {
+    public void addToCart(@Nonnull AddToCartRequest request) {
         try {
             int userId = getUserId();
             String isbn = request.isbn();
@@ -60,10 +59,9 @@ public class HelloReactEndpoint {
             } else {
                 jdbcTemplate.update(addToCartSql, new Object[] { userId, isbn, quantity });
             }
-            return true;
         } catch (Exception e) {
             e.printStackTrace();
-            return false;
+            throw new Error("Error");
         }
     }
 

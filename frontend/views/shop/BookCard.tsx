@@ -29,10 +29,10 @@ export default function BookCard(props: BookCardProps) {
   const handleAddToCart = () => {
     setAddingState(1);
     HelloReactEndpoint.addToCart({ isbn: props.isbn, quantity })
-      .then((response) => {
+      .then(() => {
         setAddingState(2);
       })
-      .catch((error) => {
+      .catch(() => {
         setAddingState(3);
         setTimeout(() => {
           setAddingState(0);
