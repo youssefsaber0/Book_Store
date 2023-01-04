@@ -2,13 +2,14 @@ import * as React from 'react';
 import Stack from '@mui/material/Stack';
 import BookCard from './BookCard';
 import { HelloReactEndpoint } from 'Frontend/generated/endpoints';
-import FilledInput from '@mui/material/FilledInput';
-import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import InputAdornment from '@mui/material/InputAdornment';
 import SearchIcon from '@mui/icons-material/Search';
-import InputLabel from '@mui/material/InputLabel';
-import { TextField } from '@mui/material';
+import ChevronLeft from '@mui/icons-material/ChevronLeft';
+import ChevronRight from '@mui/icons-material/ChevronRight';
+import IconButton from '@mui/material/IconButton';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 
 interface BooksResponse {
   isbn: string;
@@ -20,22 +21,22 @@ interface BooksResponse {
 }
 
 export default function ShopView() {
-
   const [books, setBooks] = React.useState<BooksResponse[]>([]);
   const [keyword, setKeyword] = React.useState<string>('');
   const [criteria, setCriteria] = React.useState<string>('title');
   const [page, setPage] = React.useState<number>(1);
 
   const searchBooks = () => {
-    const bookPromise = keyword === ''
-      ? HelloReactEndpoint.getAllBooks(page)
-      : criteria === 'title'
-      ? HelloReactEndpoint.searchBookByTitle(keyword, page)
-      : criteria === 'author'
-      ? HelloReactEndpoint.searchBookByAuthor(keyword, page)
-      : criteria === 'publisher'
-      ? HelloReactEndpoint.searchBookByPublisher(keyword, page)
-      : HelloReactEndpoint.searchBookByISBN(keyword, page);
+    const bookPromise =
+      keyword === ''
+        ? HelloReactEndpoint.getAllBooks(page)
+        : criteria === 'title'
+        ? HelloReactEndpoint.searchBookByTitle(keyword, page)
+        : criteria === 'author'
+        ? HelloReactEndpoint.searchBookByAuthor(keyword, page)
+        : criteria === 'publisher'
+        ? HelloReactEndpoint.searchBookByPublisher(keyword, page)
+        : HelloReactEndpoint.searchBookByISBN(keyword, page);
 
     bookPromise.then((response) => {
       console.log(JSON.parse(response));
@@ -59,7 +60,7 @@ export default function ShopView() {
 
   React.useEffect(() => {
     searchBooks();
-  }, []);
+  }, [page]);
 
   return (
     <Stack maxWidth="xl" spacing={2} alignItems="center">
@@ -67,9 +68,9 @@ export default function ShopView() {
         <TextField
           id="book-search"
           hiddenLabel
-          placeholder='Search'
+          placeholder="Search"
           variant="filled"
-          size='small'
+          size="small"
           sx={{ flex: 1 }}
           onChange={handleKeywordChange}
           onKeyDown={handleKeyDown}
@@ -87,7 +88,6 @@ export default function ShopView() {
           <option value="publisher">publisher</option>
           <option value="isbn">isbn</option>
         </Select>
-
       </Stack>
       {books.map((book) => (
         <BookCard
@@ -100,6 +100,15 @@ export default function ShopView() {
           stock={book.stock}
         />
       ))}
+      <Stack direction="row" spacing={2} alignItems="center">
+        <IconButton onClick={() => setPage(page - 1)} disabled={page === 1}>
+          <ChevronLeft />
+        </IconButton>
+        <Typography variant="h6">{page}</Typography>
+        <IconButton onClick={() => setPage(page + 1)} disabled={books.length < 10}>
+          <ChevronRight />
+        </IconButton>
+      </Stack>
     </Stack>
   );
 }

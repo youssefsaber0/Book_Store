@@ -32,14 +32,15 @@ public class HelloReactEndpoint {
     private int getUserId() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String name = auth.getName();
-        return jdbcTemplate.queryForObject("SELECT user_id FROM USER WHERE email = ?", Integer.class, new Object[] { name });
+        return jdbcTemplate.queryForObject("SELECT user_id FROM USER WHERE email = ?", Integer.class,
+                new Object[] { name });
     }
 
     @Nonnull
     public List<Map<String, Object>> getBooks() {
         try {
             List<Map<String, Object>> ls = jdbcTemplate.queryForList("select * from BOOK");
-           
+
             return ls;
         } catch (Exception e) {
             e.printStackTrace();
@@ -55,7 +56,8 @@ public class HelloReactEndpoint {
             final String isItemInCartSql = "SELECT COUNT(*) FROM CART WHERE user_id = ? AND isbn = ?;";
             final String addToCartSql = "INSERT INTO CART (user_id, isbn, qty) VALUES (?, ?, ?);";
             final String updateCartSql = "UPDATE CART SET qty = qty + ? WHERE user_id = ? AND isbn = ?;";
-            boolean isItemInCart = jdbcTemplate.queryForObject(isItemInCartSql, Boolean.class, new Object[] { userId, isbn });
+            boolean isItemInCart = jdbcTemplate.queryForObject(isItemInCartSql, Boolean.class,
+                    new Object[] { userId, isbn });
             if (isItemInCart) {
                 jdbcTemplate.update(updateCartSql, new Object[] { quantity, userId, isbn });
             } else {
@@ -84,7 +86,8 @@ public class HelloReactEndpoint {
     public String searchBookByTitle(@Nonnull String keyword, int page) {
         try {
             final String sql = "SELECT *, (SELECT GROUP_CONCAT(author_name SEPARATOR ', ') FROM AUTHOR WHERE AUTHOR.isbn = BOOK.isbn) AS authors FROM BOOK WHERE title LIKE ? LIMIT ?, 10;";
-            List<Map<String, Object>> ls = jdbcTemplate.queryForList(sql, new Object[] { "%" + keyword + "%", (page - 1) * 10 });
+            List<Map<String, Object>> ls = jdbcTemplate.queryForList(sql,
+                    new Object[] { "%" + keyword + "%", (page - 1) * 10 });
             final String str = mapper.writeValueAsString(ls);
             return str;
         } catch (Exception e) {
@@ -97,7 +100,8 @@ public class HelloReactEndpoint {
     public String searchBookByISBN(@Nonnull String keyword, int page) {
         try {
             final String sql = "SELECT *, (SELECT GROUP_CONCAT(author_name SEPARATOR ', ') FROM AUTHOR WHERE AUTHOR.isbn = BOOK.isbn) AS authors FROM BOOK WHERE isbn LIKE ? LIMIT ?, 10;";
-            List<Map<String, Object>> ls = jdbcTemplate.queryForList(sql, new Object[] { "%" + keyword + "%", (page - 1) * 10 });
+            List<Map<String, Object>> ls = jdbcTemplate.queryForList(sql,
+                    new Object[] { "%" + keyword + "%", (page - 1) * 10 });
             final String str = mapper.writeValueAsString(ls);
             return str;
         } catch (Exception e) {
@@ -123,7 +127,8 @@ public class HelloReactEndpoint {
     public String searchBookByPublisher(@Nonnull String keyword, int page) {
         try {
             final String sql = "SELECT *, (SELECT GROUP_CONCAT(author_name SEPARATOR ', ') FROM AUTHOR WHERE AUTHOR.isbn = BOOK.isbn) AS authors FROM BOOK WHERE publisher_name LIKE ? LIMIT ?, 10;";
-            List<Map<String, Object>> ls = jdbcTemplate.queryForList(sql, new Object[] { "%" + keyword + "%", (page - 1) * 10 });
+            List<Map<String, Object>> ls = jdbcTemplate.queryForList(sql,
+                    new Object[] { "%" + keyword + "%", (page - 1) * 10 });
             final String str = mapper.writeValueAsString(ls);
             return str;
         } catch (Exception e) {
@@ -183,12 +188,14 @@ public class HelloReactEndpoint {
             final String phoneNumber = req.phoneNumber();
             final String isEmailExistsSql = "SELECT COUNT(*) FROM USER WHERE email = ?;";
             final String registerSql = "INSERT INTO USER (first_name, last_name, email, password, role, shipping_address, phone_number) VALUES (?, ?, ?, ?, ?, ?, ?);";
-            final boolean isEmailExists = jdbcTemplate.queryForObject(isEmailExistsSql, Integer.class, new Object[] { email }) > 0;
+            final boolean isEmailExists = jdbcTemplate.queryForObject(isEmailExistsSql, Integer.class,
+                    new Object[] { email }) > 0;
             if (isEmailExists) {
                 return false;
             }
             final String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
-            jdbcTemplate.update(registerSql, new Object[] { firstName, lastName, email, hashedPassword, role, shippingAddress, phoneNumber });
+            jdbcTemplate.update(registerSql,
+                    new Object[] { firstName, lastName, email, hashedPassword, role, shippingAddress, phoneNumber });
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -202,19 +209,19 @@ public class HelloReactEndpoint {
         String name = auth.getName();
         Map<String, Object> ls = jdbcTemplate.queryForMap("SELECT * FROM USER WHERE email = ?;", new Object[] { name });
         UserInfo userInfo = new UserInfo(
-            (Integer) ls.get("user_id"),
-            (String) ls.get("first_name"),
-            (String) ls.get("last_name"),
-            (String) ls.get("email"),
-            (String) ls.get("role"),
-            (String) ls.get("shipping_address"),
-            (String) ls.get("phone_number")
-        );
+                (Integer) ls.get("user_id"),
+                (String) ls.get("first_name"),
+                (String) ls.get("last_name"),
+                (String) ls.get("email"),
+                (String) ls.get("role"),
+                (String) ls.get("shipping_address"),
+                (String) ls.get("phone_number"));
         return userInfo;
     }
+
     @Nonnull
-        public List<Map<String, Object>> getAllPublishers( ) {
-         try {
+    public List<Map<String, Object>> getAllPublishers() {
+        try {
             List<Map<String, Object>> ls = jdbcTemplate.queryForList("select * from publisher");
             // final String str = mapper.writeValueAsString(ls);
             return ls;
@@ -223,47 +230,48 @@ public class HelloReactEndpoint {
             return null;
         }
     }
-    @Nonnull
-        public boolean AddBookRequest(@Nonnull AddBookRequest addBookRequest) {
-         System.out.println(addBookRequest.publisher());
 
-            try {
-            int category =0;
-            switch(addBookRequest.category()){
+    @Nonnull
+    public boolean AddBookRequest(@Nonnull AddBookRequest addBookRequest) {
+        System.out.println(addBookRequest.publisher());
+
+        try {
+            int category = 0;
+            switch (addBookRequest.category()) {
                 case "Science":
-                    category=1;
+                    category = 1;
                     break;
                 case "Art":
-                    category=2;
+                    category = 2;
                     break;
                 case "Religion":
-                    category=3;
+                    category = 3;
                     break;
                 case "History":
-                    category=4;
+                    category = 4;
                     break;
                 case "Geography":
-                    category=5;
+                    category = 5;
                     break;
             }
-            // isbn varchar(17), title varchar(255), category int, publication_year int, stock int, threshold int, price double, publisher_name varchar(50)
-            jdbcTemplate.update("CALL add_book(?,?,?,?,?,?,?,?)", 
-            addBookRequest.isbn(),
-            addBookRequest.title(),
-            category,
-            addBookRequest.publishYear(),
-            addBookRequest.numberOfCopies(),
-            addBookRequest.threshhold(),
-            addBookRequest.price(),
-            addBookRequest.publisher()
-            );
-                                 final String authorSql = "INSERT INTO author VALUES ( ?, ?);";
+            // isbn varchar(17), title varchar(255), category int, publication_year int,
+            // stock int, threshold int, price double, publisher_name varchar(50)
+            jdbcTemplate.update("CALL add_book(?,?,?,?,?,?,?,?)",
+                    addBookRequest.isbn(),
+                    addBookRequest.title(),
+                    category,
+                    addBookRequest.publishYear(),
+                    addBookRequest.numberOfCopies(),
+                    addBookRequest.threshhold(),
+                    addBookRequest.price(),
+                    addBookRequest.publisher());
+            final String authorSql = "INSERT INTO author VALUES ( ?, ?);";
 
-         String [] authors= addBookRequest.authors();
-         for (int i = 0; i < authors.length; i++) {
-                        jdbcTemplate.update(authorSql, new Object[] { addBookRequest.isbn(), authors[i]});
+            String[] authors = addBookRequest.authors();
+            for (int i = 0; i < authors.length; i++) {
+                jdbcTemplate.update(authorSql, new Object[] { addBookRequest.isbn(), authors[i] });
 
-         }
+            }
             return true;
         } catch (Exception e) {
             e.printStackTrace();
