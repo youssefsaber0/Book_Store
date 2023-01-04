@@ -46,7 +46,7 @@
   "devDependencies": {
     "@rollup/plugin-replace": "3.1.0",
     "@rollup/pluginutils": "4.1.0",
-    "@types/react": "^18.0.25",
+    "@types/react": "^18.0.26",
     "@types/react-dom": "^18.0.8",
     "@vitejs/plugin-react": "^2.2.0",
     "async": "3.2.2",
@@ -150,6 +150,6 @@
       "workbox-core": "6.5.4",
       "workbox-precaching": "6.5.4"
     },
-    "hash": "07ae91d4ad4902b9006284825985c908fb830abf158ca612ed3424e63f1e6982"
+    "hash": "676057d6369c5e5d4e9136d344683dbd3cf021f49cd34eac12478ce19a6bed0d"
   }
 }

@@ -25,7 +25,6 @@ function DropDown({ onChange, list, sx, label }: dropProps) {
   const [value, setValue] = useState<string>('');
   const categories = list;
   const handleChange = (value: any) => {
-    console.log(value);
     setValue(value);
     onChange(value);
   };
@@ -38,7 +37,7 @@ function DropDown({ onChange, list, sx, label }: dropProps) {
       value={value}
       onChange={(event) => {
         handleChange(event.target.value);
-        onChange(value);
+        onChange(event.target.value);
       }}
     >
       {categories.map((name) => (
@@ -107,7 +106,7 @@ export default function AddBook() {
                 <Typography component="h1" variant="h5">
                   Add Book
                 </Typography>
-                <Box component="form" sx={{ mt: 1 }}>
+                <Box sx={{ mt: 1 }}>
                   <TextField
                     sx={{ marginTop: '20px', width: '50%' }}
                     margin="normal"
@@ -195,7 +194,6 @@ export default function AddBook() {
                   <div>
                     <DropDown
                       onChange={(value: any) => {
-                        console.log(value);
                         setCategory(value);
                       }}
                       list={categories}
@@ -204,7 +202,6 @@ export default function AddBook() {
                     />
                     <DropDown
                       onChange={(value: any) => {
-                        console.log(value);
                         setPulishYear(value);
                       }}
                       list={years(1850)}
