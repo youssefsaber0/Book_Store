@@ -9,6 +9,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
+import com.example.application.DTO.AddToCartRequest;
 import com.example.application.DTO.SignUpRequest;
 import com.example.application.DTO.AddBookRequest;
 
@@ -46,6 +47,26 @@ public class HelloReactEndpoint {
         }
     }
 
+    public void addToCart(@Nonnull AddToCartRequest request) {
+        try {
+            int userId = getUserId();
+            String isbn = request.isbn();
+            int quantity = request.quantity();
+            final String isItemInCartSql = "SELECT COUNT(*) FROM CART WHERE user_id = ? AND isbn = ?;";
+            final String addToCartSql = "INSERT INTO CART (user_id, isbn, qty) VALUES (?, ?, ?);";
+            final String updateCartSql = "UPDATE CART SET qty = qty + ? WHERE user_id = ? AND isbn = ?;";
+            boolean isItemInCart = jdbcTemplate.queryForObject(isItemInCartSql, Boolean.class, new Object[] { userId, isbn });
+            if (isItemInCart) {
+                jdbcTemplate.update(updateCartSql, new Object[] { quantity, userId, isbn });
+            } else {
+                jdbcTemplate.update(addToCartSql, new Object[] { userId, isbn, quantity });
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Error("Error");
+        }
+    }
+
     @Nonnull
     public String getAllBooks(int page) {
         try {
@@ -62,7 +83,7 @@ public class HelloReactEndpoint {
     @Nonnull
     public String searchBookByTitle(@Nonnull String keyword, int page) {
         try {
-            final String sql = "SELECT *, (SELECT GROUP_CONCAT(author_name SEPARATOR ', ') FROM AUTHOR WHERE AUTHOR.isbn = BOOK.isbn) AS authors FROM BOOK WHERE title ILIKE ? LIMIT ?, 10;";
+            final String sql = "SELECT *, (SELECT GROUP_CONCAT(author_name SEPARATOR ', ') FROM AUTHOR WHERE AUTHOR.isbn = BOOK.isbn) AS authors FROM BOOK WHERE title LIKE ? LIMIT ?, 10;";
             List<Map<String, Object>> ls = jdbcTemplate.queryForList(sql, new Object[] { "%" + keyword + "%", (page - 1) * 10 });
             final String str = mapper.writeValueAsString(ls);
             return str;
@@ -75,7 +96,7 @@ public class HelloReactEndpoint {
     @Nonnull
     public String searchBookByISBN(@Nonnull String keyword, int page) {
         try {
-            final String sql = "SELECT *, (SELECT GROUP_CONCAT(author_name SEPARATOR ', ') FROM AUTHOR WHERE AUTHOR.isbn = BOOK.isbn) AS authors FROM BOOK WHERE isbn ILIKE ? LIMIT ?, 10;";
+            final String sql = "SELECT *, (SELECT GROUP_CONCAT(author_name SEPARATOR ', ') FROM AUTHOR WHERE AUTHOR.isbn = BOOK.isbn) AS authors FROM BOOK WHERE isbn LIKE ? LIMIT ?, 10;";
             List<Map<String, Object>> ls = jdbcTemplate.queryForList(sql, new Object[] { "%" + keyword + "%", (page - 1) * 10 });
             final String str = mapper.writeValueAsString(ls);
             return str;
@@ -101,7 +122,7 @@ public class HelloReactEndpoint {
     @Nonnull
     public String searchBookByPublisher(@Nonnull String keyword, int page) {
         try {
-            final String sql = "SELECT *, (SELECT GROUP_CONCAT(author_name SEPARATOR ', ') FROM AUTHOR WHERE AUTHOR.isbn = BOOK.isbn) AS authors FROM BOOK WHERE publisher_name ILIKE ? LIMIT ?, 10;";
+            final String sql = "SELECT *, (SELECT GROUP_CONCAT(author_name SEPARATOR ', ') FROM AUTHOR WHERE AUTHOR.isbn = BOOK.isbn) AS authors FROM BOOK WHERE publisher_name LIKE ? LIMIT ?, 10;";
             List<Map<String, Object>> ls = jdbcTemplate.queryForList(sql, new Object[] { "%" + keyword + "%", (page - 1) * 10 });
             final String str = mapper.writeValueAsString(ls);
             return str;
@@ -114,7 +135,7 @@ public class HelloReactEndpoint {
     @Nonnull
     public String searchBookByAuthor(@Nonnull String keyword, int page) {
         try {
-            final String sql = "SELECT *, (SELECT GROUP_CONCAT(author_name SEPARATOR ', ') FROM AUTHOR WHERE AUTHOR.isbn = BOOK.isbn) AS authors FROM BOOK WHERE EXISTS (SELECT * FROM AUTHOR WHERE AUTHOR.isbn = BOOK.isbn AND author_name ILIKE ?) LIMIT ?, 10;";
+            final String sql = "SELECT *, (SELECT GROUP_CONCAT(author_name SEPARATOR ', ') FROM AUTHOR WHERE AUTHOR.isbn = BOOK.isbn) AS authors FROM BOOK WHERE EXISTS (SELECT * FROM AUTHOR WHERE AUTHOR.isbn = BOOK.isbn AND author_name LIKE ?) LIMIT ?, 10;";
             List<Map<String, Object>> ls = jdbcTemplate.queryForList(sql, new Object[] { keyword, (page - 1) * 10 });
             final String str = mapper.writeValueAsString(ls);
             return str;
@@ -129,6 +150,19 @@ public class HelloReactEndpoint {
         try {
             final String sql = "SELECT *, (SELECT GROUP_CONCAT(author_name SEPARATOR ', ') FROM AUTHOR WHERE AUTHOR.isbn = BOOK.isbn) AS authors FROM BOOK WHERE category = ? LIMIT ?, 10;";
             List<Map<String, Object>> ls = jdbcTemplate.queryForList(sql, new Object[] { keyword, (page - 1) * 10 });
+            final String str = mapper.writeValueAsString(ls);
+            return str;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Error";
+        }
+    }
+
+    public String getCartItems() {
+        try {
+            final int userId = getUserId();
+            final String sql = "SELECT CART.isbn AS isbn, BOOK.title AS title, BOOK.price AS price, CART.qty AS quantity FROM CART, BOOK WHERE CART.user_id = ? AND CART.isbn = BOOK.isbn;";
+            List<Map<String, Object>> ls = jdbcTemplate.queryForList(sql, new Object[] { userId });
             final String str = mapper.writeValueAsString(ls);
             return str;
         } catch (Exception e) {
