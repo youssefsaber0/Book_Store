@@ -18,6 +18,7 @@
     "@lit-labs/react": "^1.0.9",
     "@mui/icons-material": "^5.11.0",
     "@mui/material": "5.11.2",
+    "@mui/x-date-pickers": "^5.0.12",
     "@polymer/iron-icon": "3.0.1",
     "@polymer/polymer": "3.5.1",
     "@vaadin-component-factory/vcf-nav": "1.0.6",
@@ -45,7 +46,7 @@
   "devDependencies": {
     "@rollup/plugin-replace": "3.1.0",
     "@rollup/pluginutils": "4.1.0",
-    "@types/react": "^18.0.25",
+    "@types/react": "^18.0.26",
     "@types/react-dom": "^18.0.8",
     "@vitejs/plugin-react": "^2.2.0",
     "async": "3.2.2",
@@ -100,7 +101,8 @@
     "@emotion/react": "$@emotion/react",
     "@emotion/styled": "$@emotion/styled",
     "module_name": "$module_name",
-    "@mui/icons-material": "$@mui/icons-material"
+    "@mui/icons-material": "$@mui/icons-material",
+    "@mui/x-date-pickers": "$@mui/x-date-pickers"
   },
   "vaadin": {
     "dependencies": {
@@ -148,6 +150,6 @@
       "workbox-core": "6.5.4",
       "workbox-precaching": "6.5.4"
     },
-    "hash": "bcb12e902d439c50c56e9c36689c91de5e772eefd5b8725bb6e0ffa2927ed555"
+    "hash": "676057d6369c5e5d4e9136d344683dbd3cf021f49cd34eac12478ce19a6bed0d"
   }
 }
