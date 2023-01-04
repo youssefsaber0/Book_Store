@@ -76,3 +76,10 @@ BEGIN
 END
 //
 
+DELIMITER //
+create procedure add_author(book_isbn varchar(13), auth varchar(255))
+BEGIN
+    insert into author
+    values(book_isbn, auth);
+END
+//
