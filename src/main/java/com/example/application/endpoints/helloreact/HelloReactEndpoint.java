@@ -156,6 +156,19 @@ public class HelloReactEndpoint {
         }
     }
 
+    public String getCartItems() {
+        try {
+            final int userId = getUserId();
+            final String sql = "SELECT CART.isbn AS isbn, BOOK.title AS title, BOOK.price AS price, CART.qty AS quantity FROM CART, BOOK WHERE CART.user_id = ? AND CART.isbn = BOOK.isbn;";
+            List<Map<String, Object>> ls = jdbcTemplate.queryForList(sql, new Object[] { userId });
+            final String str = mapper.writeValueAsString(ls);
+            return str;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Error";
+        }
+    }
+
     @Nonnull
     public boolean register(@Nonnull SignUpRequest req) {
         try {
