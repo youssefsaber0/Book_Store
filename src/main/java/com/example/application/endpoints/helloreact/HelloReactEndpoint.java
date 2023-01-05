@@ -38,8 +38,7 @@ public class HelloReactEndpoint {
     @Nonnull
     public List<Map<String, Object>> getBooks() {
         try {
-            List<Map<String, Object>> ls = jdbcTemplate.queryForList("select * from BOOK");
-
+            List<Map<String, Object>> ls = jdbcTemplate.queryForList("select * from BOOK LIMIT 500;");
             return ls;
         } catch (Exception e) {
             e.printStackTrace();
@@ -86,7 +85,7 @@ public class HelloReactEndpoint {
             }
             String[] date = expirationDate.split("/");
             int month = Integer.parseInt(date[0]);
-            int year = Integer.parseInt("20" + date[1]);
+            int year = Integer.parseInt(date[1]);
             Date today = new Date();
             if (year < today.getYear() || (year == today.getYear() && month < today.getMonth())) {
                 throw new Error("Invalid expiration date");
@@ -291,7 +290,7 @@ public class HelloReactEndpoint {
     @Nonnull
     public List<Map<String, Object>> getAllPublishers() {
         try {
-            List<Map<String, Object>> ls = jdbcTemplate.queryForList("select * from publisher");
+            List<Map<String, Object>> ls = jdbcTemplate.queryForList("select * from PUBLISHER");
             // final String str = mapper.writeValueAsString(ls);
             return ls;
         } catch (Exception e) {
@@ -334,7 +333,7 @@ public class HelloReactEndpoint {
                     addBookRequest.threshhold(),
                     addBookRequest.price(),
                     addBookRequest.publisher());
-            final String authorSql = "INSERT INTO author VALUES ( ?, ?);";
+            final String authorSql = "INSERT INTO AUTHOR VALUES ( ?, ?);";
 
             String[] authors = addBookRequest.authors();
             for (int i = 0; i < authors.length; i++) {
@@ -363,9 +362,7 @@ public class HelloReactEndpoint {
        @Nonnull
     public String getAllUsers() {
         try {
-            // final String sql = "SELECT * FROM User ";
-            List<Map<String, Object>> ls = jdbcTemplate.queryForList("select * from User");;
-            // final String str = mapper.writeValueAsString(ls);
+            List<Map<String, Object>> ls = jdbcTemplate.queryForList("select * from USER");
             String resp=mapper.writeValueAsString(ls);
             return resp;
         } catch (Exception e) {
@@ -377,7 +374,7 @@ public class HelloReactEndpoint {
         public boolean promote(int id) {
         try {
             // final String sql = "SELECT * FROM User ";
-            jdbcTemplate.update("update  User set role = 'admin' where user_id = ?",id);;
+            jdbcTemplate.update("update USER set role = 'admin' where user_id = ?",id);;
             // final String str = mapper.writeValueAsString(ls);
             return true;
         } catch (Exception e) {
@@ -388,7 +385,7 @@ public class HelloReactEndpoint {
         @Nonnull
         public List<Map<String, Object>> getOrders() {
         try {
-           List<Map<String, Object>> ls = jdbcTemplate.queryForList("SELECT * FROM bookstore.order");
+           List<Map<String, Object>> ls = jdbcTemplate.queryForList("SELECT * FROM BOOKSTORE.ORDER");
             return ls;
         } catch (Exception e) {
             e.printStackTrace();
@@ -398,7 +395,7 @@ public class HelloReactEndpoint {
             @Nonnull
         public boolean newOrder(@NonNull OrderRequest order) {
         try {
-            jdbcTemplate.update("INSERT INTO bookstore.order(isbn,QTY) values(?,?)",order.isbn(),order.count());
+            jdbcTemplate.update("INSERT INTO BOOKSTORE.ORDER(isbn,qty) values(?,?)",order.isbn(),order.count());
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -409,7 +406,7 @@ public class HelloReactEndpoint {
         public boolean confirmOrder(@NonNull Integer id) {
         try {
             System.out.println(id);
-            jdbcTemplate.update("Delete from bookstore.order where order_id = ?",id);
+            jdbcTemplate.update("Delete from BOOKSTORE.ORDER where order_id = ?",id);
             return true;
         } catch (Exception e) {
             e.printStackTrace();

@@ -27,10 +27,10 @@ export default function CheckoutCard(props: BookCartProps) {
   const handleCheckout = () => {
     HelloReactEndpoint.checkout({ cardNumber, expirationDate: expiryDate })
       .then(() => {
-        console.log('Checkout successful');
+        window.location.href = '/';
       })
       .catch((error) => {
-        console.log(error);
+        alert("Wrong card number or expiration date");
       });
   };
 
