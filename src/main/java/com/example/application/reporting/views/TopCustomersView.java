@@ -13,11 +13,10 @@ import java.io.Serializable;
 
 @AllArgsConstructor
 @Entity
-@Immutable
-@Table(name = "`top_customers`")
+@Table(name = "top_customers")
 @Getter
 @NoArgsConstructor
-public class TopCustomersView implements Serializable {
+public class TopCustomersView {
     @Id
     @Column(name = "user_id")
     private int user_id;
