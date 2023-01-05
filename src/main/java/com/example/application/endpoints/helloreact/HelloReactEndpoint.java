@@ -11,6 +11,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
 import com.example.application.DTO.AddToCartRequest;
+import com.example.application.DTO.EditBookRequest;
+import com.example.application.DTO.OrderRequest;
 import com.example.application.DTO.CheckoutRequest;
 import com.example.application.DTO.SignUpRequest;
 import com.example.application.DTO.UpdateUserRequest;
@@ -21,6 +23,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import dev.hilla.Endpoint;
 import dev.hilla.Nonnull;
+import lombok.NonNull;
 
 @Endpoint
 @AnonymousAllowed
@@ -338,6 +341,75 @@ public class HelloReactEndpoint {
                 jdbcTemplate.update(authorSql, new Object[] { addBookRequest.isbn(), authors[i] });
 
             }
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    //dec_book_quantity_by(book_isbn varchar(17), val int)
+    @Nonnull 
+    public  boolean editBook(@Nonnull EditBookRequest editBookRequest){
+        try{jdbcTemplate.update("CALL dec_book_quantity_by(?,?)",
+        editBookRequest.isbn(),
+        editBookRequest.value()
+        );
+        return true;
+    }catch(Exception e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+       @Nonnull
+    public String getAllUsers() {
+        try {
+            // final String sql = "SELECT * FROM User ";
+            List<Map<String, Object>> ls = jdbcTemplate.queryForList("select * from User");;
+            // final String str = mapper.writeValueAsString(ls);
+            String resp=mapper.writeValueAsString(ls);
+            return resp;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    @Nonnull
+        public boolean promote(int id) {
+        try {
+            // final String sql = "SELECT * FROM User ";
+            jdbcTemplate.update("update  User set role = 'admin' where user_id = ?",id);;
+            // final String str = mapper.writeValueAsString(ls);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+        @Nonnull
+        public List<Map<String, Object>> getOrders() {
+        try {
+           List<Map<String, Object>> ls = jdbcTemplate.queryForList("SELECT * FROM bookstore.order");
+            return ls;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+            @Nonnull
+        public boolean newOrder(@NonNull OrderRequest order) {
+        try {
+            jdbcTemplate.update("INSERT INTO bookstore.order(isbn,QTY) values(?,?)",order.isbn(),order.count());
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+                @Nonnull
+        public boolean confirmOrder(@NonNull Integer id) {
+        try {
+            System.out.println(id);
+            jdbcTemplate.update("Delete from bookstore.order where order_id = ?",id);
             return true;
         } catch (Exception e) {
             e.printStackTrace();
