@@ -18,6 +18,12 @@ function Book({ title, ISBN }: userProps) {
     HelloReactEndpoint.editBook({
       isbn: ISBN,
       value: value,
+    }).then((val) => {
+      if (val) {
+        window.alert('changed successfuly');
+      } else {
+        window.alert('Required number of books is not available;');
+      }
     });
     console.log({ value: value });
   }

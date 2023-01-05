@@ -73,28 +73,27 @@ export default function AddBook() {
   }, []);
   var categories = ['Science', 'Art', 'Religion', 'History', 'Geography'];
   function addBook() {
-    // console.log({
-    //   isbn: ISBN,
-    //   title: title,
-    //   authors: authors,
-    //   publisher: pulisher,
-    //   numberOfCopies: Number(numberOfCopies),
-    //   threshhold: Number(threshhold),
-    //   categories: category,
-    //   publishYear: pulishYear,
-    //   price: Number(price),
-    // });
-    HelloReactEndpoint.AddBookRequest({
-      isbn: ISBN,
-      title: title,
-      authors: authors as (string | undefined)[],
-      publisher: pulisher,
-      numberOfCopies: Number(numberOfCopies),
-      threshhold: Number(threshhold),
-      category: category,
-      publishYear: Number(pulishYear),
-      price: Number(price),
-    }).then((val) => {});
+    if (Number(numberOfCopies) >= Number(threshhold) && Number(threshhold) > 0 && Number(price) > 0) {
+      HelloReactEndpoint.AddBookRequest({
+        isbn: ISBN,
+        title: title,
+        authors: authors as (string | undefined)[],
+        publisher: pulisher,
+        numberOfCopies: Number(numberOfCopies),
+        threshhold: Number(threshhold),
+        category: category,
+        publishYear: Number(pulishYear),
+        price: Number(price),
+      }).then((val) => {
+        if (val) {
+          window.alert('book added successfuly');
+        } else {
+          window.alert('error in add book');
+        }
+      });
+    } else {
+      window.alert('not valid argument');
+    }
   }
   return (
     <ThemeProvider theme={theme}>
