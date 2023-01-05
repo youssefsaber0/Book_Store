@@ -57,18 +57,18 @@ export default function EditBooks() {
   useEffect(() => {
     setShowBooks([]);
     setBooks([]);
-    HelloReactEndpoint.getBooks().then((res) => {
+    HelloReactEndpoint.getBooks().then((res: any) => {
       console.log(res);
       // (old) => [...old, ...newArrayData];
 
-      res.map((val) => {
+      res.map((val: any) => {
         setBooks([...books, { ISBN: val?.isbn, title: val?.title }]);
+        setShowBooks([...books, { ISBN: val?.isbn, title: val?.title }]);
         console.log({ ISBN: val?.isbn, title: val?.title });
       });
       // setBooks(res);
       // .then((e) => );
       console.log(books);
-      setShowBooks(books);
     });
 
     // change background color with a random color

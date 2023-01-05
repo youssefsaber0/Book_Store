@@ -29,7 +29,16 @@ public class HelloReactEndpoint {
     JdbcTemplate jdbcTemplate;
 
     private final ObjectMapper mapper = new ObjectMapper();
+    @Nonnull
+    public List<Map<String, Object>> getBooks() {
+        try {
+            List<Map<String, Object>> ls = jdbcTemplate.queryForList("select * from BOOK");
 
+            return ls;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }}
     private int getUserId() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String name = auth.getName();
