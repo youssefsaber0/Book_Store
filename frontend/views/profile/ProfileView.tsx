@@ -1,7 +1,6 @@
 import * as React from 'react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-import Link from '@mui/material/Link';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { useState } from 'react';
@@ -10,10 +9,6 @@ import { Card, InputAdornment, Radio, RadioGroup } from '@mui/material';
 import { HelloReactEndpoint } from 'Frontend/generated/endpoints';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import EmailIcon from '@mui/icons-material/Email';
-
-interface RoleProps {
-  onChange: any;
-}
 
 interface PasswordProps {
   lab: String;
@@ -57,7 +52,6 @@ export default function SignupView() {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [confirmPassword, setConfirmPassword] = useState<string>('');
-  const [role, setRole] = useState<string>('');
   const [shippingAddress, setShippingAddress] = useState<string>('');
   const [phoneNumber, setPhoneNumber] = useState<string>('');
 
@@ -74,7 +68,7 @@ export default function SignupView() {
   }, []);
 
   const handleSubmit = () => {
-    if (isEmailValid() && password.length >= 8 && confirmPassword === password && role.length > 0 && email) {
+    if (isEmailValid() && password.length >= 8 && confirmPassword === password && email) {
       console.log({
         email: email,
         password: password,
@@ -173,6 +167,7 @@ export default function SignupView() {
         fullWidth
         id="shippingAddress"
         label="Shipping Address"
+        value={shippingAddress}
         onChange={(e) => {
           setShippingAddress(e.currentTarget.value);
         }}
