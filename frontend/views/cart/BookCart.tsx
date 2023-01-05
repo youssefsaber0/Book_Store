@@ -1,11 +1,9 @@
 import * as React from 'react';
 import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Stack from '@mui/material/Stack';
 import DeleteIcon from '@mui/icons-material/Close';
-import Select from '@mui/material/Select';
 import IconButton from '@mui/material/IconButton';
 import { HelloReactEndpoint } from 'Frontend/generated/endpoints';
 import type { SxProps } from '@mui/material';

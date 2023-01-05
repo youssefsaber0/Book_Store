@@ -1,10 +1,8 @@
 import * as React from 'react';
-import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Link from '@mui/material/Link';
 import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { useState } from 'react';
 import VisibilityIcon from '@mui/icons-material/Visibility';
@@ -81,18 +79,15 @@ export default function SignupView() {
         email: email,
         password: password,
       });
-      HelloReactEndpoint.register({
+      HelloReactEndpoint.updateUser({
         firstName: firstName,
         lastName: lastName,
         email: email,
         password: password,
-        role: role,
         shippingAddress: shippingAddress,
         phoneNumber: phoneNumber,
-      }).then((res) => {
-        if (res) {
-          window.location.href = '/login';
-        }
+      }).then(() => {
+        window.location.href = '/';
       });
     }
   };

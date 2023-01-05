@@ -11,6 +11,7 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 
 import com.example.application.DTO.AddToCartRequest;
 import com.example.application.DTO.SignUpRequest;
+import com.example.application.DTO.UpdateUserRequest;
 import com.example.application.DTO.AddBookRequest;
 
 import com.example.application.security.UserInfo;
@@ -34,18 +35,6 @@ public class HelloReactEndpoint {
         String name = auth.getName();
         return jdbcTemplate.queryForObject("SELECT user_id FROM USER WHERE email = ?", Integer.class,
                 new Object[] { name });
-    }
-
-    @Nonnull
-    public List<Map<String, Object>> getBooks() {
-        try {
-            List<Map<String, Object>> ls = jdbcTemplate.queryForList("select * from BOOK");
-
-            return ls;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
     }
 
     public void addToCart(@Nonnull AddToCartRequest request) {
@@ -188,7 +177,6 @@ public class HelloReactEndpoint {
         }
     }
 
-
     @Nonnull
     public boolean register(@Nonnull SignUpRequest req) {
         try {
@@ -213,6 +201,31 @@ public class HelloReactEndpoint {
         } catch (Exception e) {
             e.printStackTrace();
             return false;
+        }
+    }
+
+    public void updateUser(@Nonnull UpdateUserRequest req) {
+        try {
+            final int userId = getUserId();
+            final String firstName = req.firstName();
+            final String lastName = req.lastName();
+            final String email = req.email();
+            final String password = req.password();
+            final String shippingAddress = req.shippingAddress();
+            final String phoneNumber = req.phoneNumber();
+            final String isEmailExistsSql = "SELECT COUNT(*) FROM USER WHERE email = ? AND user_id != ?;";
+            final String registerSql = "UPDATE USER SET first_name = ?, last_name = ?, email = ?, password = ?, shipping_address = ?, phone_number = ? WHERE user_id = ?;";
+            final boolean isEmailExists = jdbcTemplate.queryForObject(isEmailExistsSql, Integer.class,
+                    new Object[] { email, userId }) > 0;
+            if (isEmailExists) {
+                throw new Error("Email already exists");
+            }
+            final String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
+            jdbcTemplate.update(registerSql,
+                    new Object[] { firstName, lastName, email, hashedPassword, shippingAddress, phoneNumber, userId });
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Error("Error");
         }
     }
 
