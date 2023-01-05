@@ -10,6 +10,7 @@ import SignupView from './views/signup/SignupView';
 import LoginView from './views/login/LoginView';
 import ShopView from './views/shop/ShopView';
 import CartView from './views/cart/CartView';
+import ProfileView from './views/profile/ProfileView';
 
 const router = createBrowserRouter([
   {
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
       {
         path: '/',
         element: <ShopView />,
+      },
+      {
+        path: '/profile',
+        element: <ProfileView />,
       },
       {
         path: '/cart',

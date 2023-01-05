@@ -191,6 +191,11 @@ export default function MenuOnLeftLayout() {
                       open={Boolean(anchorElUser)}
                       onClose={handleCloseUserMenu}
                     >
+                      <Link to="/profile" style={{ textDecoration: 'none' }}>
+                        <MenuItem onClick={handleCloseUserMenu}>
+                          <Typography textAlign="center">Profile</Typography>
+                        </MenuItem>
+                      </Link>
                       <MenuItem onClick={handleLogout}>
                         <Typography textAlign="center">Logout</Typography>
                       </MenuItem>
