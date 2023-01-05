@@ -68,6 +68,7 @@ export async function login(username: string, password: string): Promise<LoginRe
  * Uses `localStorage` for offline support.
  */
 export async function logout() {
+  await HelloReactEndpoint.emptyCart();
   setSessionExpired();
   return await logoutImpl();
 }

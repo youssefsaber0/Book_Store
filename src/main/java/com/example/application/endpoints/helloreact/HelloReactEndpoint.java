@@ -172,7 +172,8 @@ public class HelloReactEndpoint {
     public String searchBookByAuthor(@Nonnull String keyword, int page) {
         try {
             final String sql = "SELECT *, (SELECT GROUP_CONCAT(author_name SEPARATOR ', ') FROM AUTHOR WHERE AUTHOR.isbn = BOOK.isbn) AS authors, CATEGORY.category AS category_name FROM BOOK, CATEGORY WHERE BOOK.category = CATEGORY.cat_id AND EXISTS (SELECT * FROM AUTHOR WHERE AUTHOR.isbn = BOOK.isbn AND author_name LIKE ?) LIMIT ?, 10;";
-            List<Map<String, Object>> ls = jdbcTemplate.queryForList(sql, new Object[] { "%" + keyword + "%", (page - 1) * 10 });
+            List<Map<String, Object>> ls = jdbcTemplate.queryForList(sql,
+                    new Object[] { "%" + keyword + "%", (page - 1) * 10 });
             final String str = mapper.writeValueAsString(ls);
             return str;
         } catch (Exception e) {
@@ -185,7 +186,8 @@ public class HelloReactEndpoint {
     public String searchBookByCategory(@Nonnull String keyword, int page) {
         try {
             final String sql = "SELECT *, (SELECT GROUP_CONCAT(author_name SEPARATOR ', ') FROM AUTHOR WHERE AUTHOR.isbn = BOOK.isbn) AS authors, CATEGORY.category AS category_name FROM BOOK, CATEGORY WHERE BOOK.category = CATEGORY.cat_id AND CATEGORY.category LIKE ? LIMIT ?, 10;";
-            List<Map<String, Object>> ls = jdbcTemplate.queryForList(sql, new Object[] { "%" + keyword + "%", (page - 1) * 10 });
+            List<Map<String, Object>> ls = jdbcTemplate.queryForList(sql,
+                    new Object[] { "%" + keyword + "%", (page - 1) * 10 });
             final String str = mapper.writeValueAsString(ls);
             return str;
         } catch (Exception e) {
@@ -243,6 +245,17 @@ public class HelloReactEndpoint {
         } catch (Exception e) {
             e.printStackTrace();
             return false;
+        }
+    }
+
+    public void emptyCart() {
+        try {
+            final int userId = getUserId();
+            final String sql = "DELETE FROM CART WHERE user_id = ?;";
+            jdbcTemplate.update(sql, new Object[] { userId });
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Error("Error");
         }
     }
 
@@ -346,35 +359,39 @@ public class HelloReactEndpoint {
             return false;
         }
     }
-    //dec_book_quantity_by(book_isbn varchar(17), val int)
-    @Nonnull 
-    public  boolean editBook(@Nonnull EditBookRequest editBookRequest){
-        try{jdbcTemplate.update("CALL dec_book_quantity_by(?,?)",
-        editBookRequest.isbn(),
-        editBookRequest.value()
-        );
-        return true;
-    }catch(Exception e){
+
+    // dec_book_quantity_by(book_isbn varchar(17), val int)
+    @Nonnull
+    public boolean editBook(@Nonnull EditBookRequest editBookRequest) {
+        try {
+            jdbcTemplate.update("CALL dec_book_quantity_by(?,?)",
+                    editBookRequest.isbn(),
+                    editBookRequest.value());
+            return true;
+        } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
     }
-       @Nonnull
+
+    @Nonnull
     public String getAllUsers() {
         try {
             List<Map<String, Object>> ls = jdbcTemplate.queryForList("select * from USER");
-            String resp=mapper.writeValueAsString(ls);
+            String resp = mapper.writeValueAsString(ls);
             return resp;
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
     }
+
     @Nonnull
-        public boolean promote(int id) {
+    public boolean promote(int id) {
         try {
             // final String sql = "SELECT * FROM User ";
-            jdbcTemplate.update("update USER set role = 'admin' where user_id = ?",id);;
+            jdbcTemplate.update("update USER set role = 'admin' where user_id = ?", id);
+            ;
             // final String str = mapper.writeValueAsString(ls);
             return true;
         } catch (Exception e) {
@@ -382,31 +399,34 @@ public class HelloReactEndpoint {
             return false;
         }
     }
-        @Nonnull
-        public List<Map<String, Object>> getOrders() {
+
+    @Nonnull
+    public List<Map<String, Object>> getOrders() {
         try {
-           List<Map<String, Object>> ls = jdbcTemplate.queryForList("SELECT * FROM BOOKSTORE.ORDER");
+            List<Map<String, Object>> ls = jdbcTemplate.queryForList("SELECT * FROM BOOKSTORE.ORDER");
             return ls;
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
     }
-            @Nonnull
-        public boolean newOrder(@NonNull OrderRequest order) {
+
+    @Nonnull
+    public boolean newOrder(@NonNull OrderRequest order) {
         try {
-            jdbcTemplate.update("INSERT INTO BOOKSTORE.ORDER(isbn,qty) values(?,?)",order.isbn(),order.count());
+            jdbcTemplate.update("INSERT INTO BOOKSTORE.ORDER(isbn,qty) values(?,?)", order.isbn(), order.count());
             return true;
         } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
     }
-                @Nonnull
-        public boolean confirmOrder(@NonNull Integer id) {
+
+    @Nonnull
+    public boolean confirmOrder(@NonNull Integer id) {
         try {
             System.out.println(id);
-            jdbcTemplate.update("Delete from BOOKSTORE.ORDER where order_id = ?",id);
+            jdbcTemplate.update("Delete from BOOKSTORE.ORDER where order_id = ?", id);
             return true;
         } catch (Exception e) {
             e.printStackTrace();
