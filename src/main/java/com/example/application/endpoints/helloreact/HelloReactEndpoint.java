@@ -10,6 +10,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
 import com.example.application.DTO.AddToCartRequest;
+import com.example.application.DTO.EditBookRequest;
 import com.example.application.DTO.SignUpRequest;
 import com.example.application.DTO.UpdateUserRequest;
 import com.example.application.DTO.AddBookRequest;
@@ -309,6 +310,19 @@ public class HelloReactEndpoint {
             }
             return true;
         } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    //dec_book_quantity_by(book_isbn varchar(17), val int)
+    @Nonnull 
+    public  boolean editBook(@Nonnull EditBookRequest editBookRequest){
+        try{jdbcTemplate.update("CALL dec_book_quantity_by(?,?)",
+        editBookRequest.isbn(),
+        editBookRequest.value()
+        );
+        return true;
+    }catch(Exception e){
             e.printStackTrace();
             return false;
         }

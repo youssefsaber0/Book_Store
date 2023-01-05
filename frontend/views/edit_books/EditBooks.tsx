@@ -15,6 +15,10 @@ type userProps = {
 function Book({ title, ISBN }: userProps) {
   function Change() {
     // TODO
+    HelloReactEndpoint.editBook({
+      isbn: ISBN,
+      value: value,
+    });
     console.log({ value: value });
   }
   const [value, setValue] = useState(0);
