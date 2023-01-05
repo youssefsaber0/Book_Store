@@ -57,7 +57,7 @@ begin
 	-- error handling and rollback
  	DECLARE exit handler for sqlexception
 		BEGIN
-			select false
+			select false as response;
 			ROLLBACK;
 		END;
 	start transaction;
@@ -85,7 +85,7 @@ begin
         -- delete from cart
 		delete from bookstore.cart as c where c.user_id = userId;
 	
-		select true
+		select true as response;
 	commit;
 end$$
 DELIMITER 

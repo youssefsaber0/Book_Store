@@ -1,5 +1,6 @@
 package com.example.application.endpoints.helloreact;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -12,6 +13,7 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 import com.example.application.DTO.AddToCartRequest;
 import com.example.application.DTO.EditBookRequest;
 import com.example.application.DTO.OrderRequest;
+import com.example.application.DTO.CheckoutRequest;
 import com.example.application.DTO.SignUpRequest;
 import com.example.application.DTO.UpdateUserRequest;
 import com.example.application.DTO.AddBookRequest;
@@ -25,13 +27,14 @@ import lombok.NonNull;
 
 @Endpoint
 @AnonymousAllowed
-@SuppressWarnings("null")
+@SuppressWarnings({ "null", "deprecation" })
 public class HelloReactEndpoint {
 
     @Autowired
     JdbcTemplate jdbcTemplate;
 
     private final ObjectMapper mapper = new ObjectMapper();
+
     @Nonnull
     public List<Map<String, Object>> getBooks() {
         try {
@@ -41,7 +44,9 @@ public class HelloReactEndpoint {
         } catch (Exception e) {
             e.printStackTrace();
             return null;
-        }}
+        }
+    }
+
     private int getUserId() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String name = auth.getName();
@@ -64,6 +69,32 @@ public class HelloReactEndpoint {
             } else {
                 jdbcTemplate.update(addToCartSql, new Object[] { userId, isbn, quantity });
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Error("Error");
+        }
+    }
+
+    public void checkout(CheckoutRequest request) {
+        try {
+            int userId = getUserId();
+            String cardNumber = request.cardNumber();
+            String expirationDate = request.expirationDate();
+            final String sql = "CALL checkout_cart(?, ?);";
+            if (!expirationDate.matches("\\d{2}/\\d{2}")) {
+                throw new Error("Invalid expiration date");
+            }
+            String[] date = expirationDate.split("/");
+            int month = Integer.parseInt(date[0]);
+            int year = Integer.parseInt("20" + date[1]);
+            Date today = new Date();
+            if (year < today.getYear() || (year == today.getYear() && month < today.getMonth())) {
+                throw new Error("Invalid expiration date");
+            }
+            if (!cardNumber.matches("\\d{16}")) {
+                throw new Error("Invalid card number");
+            }
+            jdbcTemplate.update(sql, new Object[] { userId, cardNumber });
         } catch (Exception e) {
             e.printStackTrace();
             throw new Error("Error");

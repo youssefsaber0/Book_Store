@@ -28,31 +28,38 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Button, Grid, InputAdornment, TextField } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { useEffect, useState } from 'react';
+import { ReportingEndPoint } from 'Frontend/generated/endpoints';
+// import { saveAs } from 'file-saver';
 
 type userProps = {
   name: string;
 };
 function Report({ name }: userProps) {
-  function promote() {
-    // TODO
-  }
   function downloadRandomReport() {
-    //url
-    fetch('a.pdf', {
-      method: 'GET',
-      headers: {
-        Accept: 'application/json',
-      },
-    }).then((response) => {
-      console.log(response?.headers);
-      const filename = response?.headers?.get('Content-Disposition')?.split('filename=')[1];
-      response.blob().then((blob) => {
-        let url = window.URL.createObjectURL(blob);
-        let a = document.createElement('a');
-        a.href = url;
-        a.download = filename as string;
-        a.click();
-      });
+    downloadBestSellersReport();
+  }
+  function downloadBookSalesReport() {
+    ReportingEndPoint.downloadBookSalesReport().then((dataUrl) => {
+      const linkElement = document.createElement('a');
+      linkElement.setAttribute('href', dataUrl as string);
+      linkElement.setAttribute('download', 'BookSalesReport');
+      linkElement.click();
+    });
+  }
+  function downloadBestSellersReport() {
+    ReportingEndPoint.downloadBestSellersReport().then((dataUrl) => {
+      const linkElement = document.createElement('a');
+      linkElement.setAttribute('href', dataUrl as string);
+      linkElement.setAttribute('download', 'BestSellersReport');
+      linkElement.click();
+    });
+  }
+  function downloadTopCustomersReport() {
+    ReportingEndPoint.downloadTopCustomersReport().then((dataUrl) => {
+      const linkElement = document.createElement('a');
+      linkElement.setAttribute('href', dataUrl as string);
+      linkElement.setAttribute('download', 'TopCustomersReport');
+      linkElement.click();
     });
   }
   return (
@@ -75,7 +82,6 @@ export default function DownloadReport() {
   const [showReports, setShowReports] = useState<any>();
 
   useEffect(() => {
-    // change background color with a random color
     setShowReports(Reports);
   }, []);
   function filterUser(value: string) {
@@ -105,7 +111,7 @@ export default function DownloadReport() {
           autoFocus
         />
       </Grid>
-      <Grid xs={20} sm={12} sx={{ mx: 50, backgroundColor: 'white', width: '50vw', height: '100%' }}>
+      <Grid xs={20} sm={12} sx={{ mx: 50, backgroundColor: 'white', width: '50vw', height: '100%' }} item>
         {showReports?.map((user: any) => (
           <Report name={user['name']} key={user['id']} />
         ))}
