@@ -1,25 +1,3 @@
-// export default function DownloadReport() {
-//   function downloadRandomImage() {
-//     //url
-//     fetch('a.pdf').then((response) => {
-//       console.log(response?.headers);
-//       const filename = response?.headers?.get('Content-Disposition')?.split('filename=')[1];
-//       response.blob().then((blob) => {
-//         let url = window.URL.createObjectURL(blob);
-//         let a = document.createElement('a');
-//         a.href = url;
-//         a.download = filename as string;
-//         a.click();
-//       });
-//     });
-//   }
-//   return (
-//     <div>
-//       <h3>Download a random file</h3>
-//       <button onClick={downloadRandomImage}>Download</button>
-//     </div>
-//   );
-// }
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
@@ -29,15 +7,28 @@ import { Button, Grid, InputAdornment, TextField } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { useEffect, useState } from 'react';
 import { ReportingEndPoint } from 'Frontend/generated/endpoints';
-// import { saveAs } from 'file-saver';
 
 type userProps = {
   name: string;
 };
+
 function Report({ name }: userProps) {
-  function downloadRandomReport() {
-    downloadBestSellersReport();
+  function downloadReport() {
+    switch (name) {
+      case 'Book Sales':
+        downloadBookSalesReport();
+        break;
+      case 'Best Sellers':
+        downloadBestSellersReport();
+        break;
+      case 'Top Customers':
+        downloadTopCustomersReport();
+        break;
+      default:
+        break;
+    }
   }
+
   function downloadBookSalesReport() {
     ReportingEndPoint.downloadBookSalesReport().then((dataUrl) => {
       const linkElement = document.createElement('a');
@@ -46,6 +37,7 @@ function Report({ name }: userProps) {
       linkElement.click();
     });
   }
+
   function downloadBestSellersReport() {
     ReportingEndPoint.downloadBestSellersReport().then((dataUrl) => {
       const linkElement = document.createElement('a');
@@ -54,6 +46,7 @@ function Report({ name }: userProps) {
       linkElement.click();
     });
   }
+
   function downloadTopCustomersReport() {
     ReportingEndPoint.downloadTopCustomersReport().then((dataUrl) => {
       const linkElement = document.createElement('a');
@@ -62,6 +55,7 @@ function Report({ name }: userProps) {
       linkElement.click();
     });
   }
+
   return (
     <Accordion sx={{ backgroundColor: 'rgb(240, 240, 240)' }}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1a-content" id="id">
@@ -69,7 +63,7 @@ function Report({ name }: userProps) {
       </AccordionSummary>
       <AccordionDetails>
         <Typography>
-          <Button variant="contained" onClick={downloadRandomReport}>
+          <Button variant="contained" onClick={downloadReport}>
             Download
           </Button>
         </Typography>
@@ -77,8 +71,9 @@ function Report({ name }: userProps) {
     </Accordion>
   );
 }
+
 export default function DownloadReport() {
-  const Reports = [{ name: 'total sales' }, { name: 'top 5 ' }, { name: 'top 10 selling books ' }];
+  const Reports = [{ name: 'Book Sales' }, { name: 'Best Sellers' }, { name: 'Top Customers' }];
   const [showReports, setShowReports] = useState<any>();
 
   useEffect(() => {
@@ -113,7 +108,7 @@ export default function DownloadReport() {
       </Grid>
       <Grid xs={20} sm={12} sx={{ mx: 50, backgroundColor: 'white', width: '50vw', height: '100%' }} item>
         {showReports?.map((user: any) => (
-          <Report name={user['name']} key={user['id']} />
+          <Report name={user['name']} key={user['name']} />
         ))}
       </Grid>
     </Grid>

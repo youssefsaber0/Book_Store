@@ -132,13 +132,18 @@ export default function MenuOnLeftLayout() {
                         display: { xs: 'block', md: 'none' },
                       }}
                     >
-                      {isUserInRole("admin") && adminPages.map((page) => (
-                        <Link to={adminRoutes[adminPages.indexOf(page)]} style={{ textDecoration: 'none' }}>
-                          <MenuItem key={page} onClick={handleCloseNavMenu}>
-                            <Typography textAlign="center">{page}</Typography>
-                          </MenuItem>
-                        </Link>
-                      ))}
+                      {isUserInRole('admin') &&
+                        adminPages.map((page) => (
+                          <Link
+                            to={adminRoutes[adminPages.indexOf(page)]}
+                            style={{ textDecoration: 'none' }}
+                            key={page}
+                          >
+                            <MenuItem onClick={handleCloseNavMenu}>
+                              <Typography textAlign="center">{page}</Typography>
+                            </MenuItem>
+                          </Link>
+                        ))}
                     </Menu>
                   </Box>
                   <BookIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
@@ -161,17 +166,14 @@ export default function MenuOnLeftLayout() {
                     BOOKSHOP
                   </Typography>
                   <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-                    {isUserInRole("admin") && adminPages.map((page) => (
-                      <Link to={adminRoutes[adminPages.indexOf(page)]} style={{ textDecoration: 'none' }}>
-                        <Button
-                          key={page}
-                          onClick={handleCloseNavMenu}
-                          sx={{ my: 2, color: 'white', display: 'block' }}
-                        >
-                          {page}
-                        </Button>
-                      </Link>
-                    ))}
+                    {isUserInRole('admin') &&
+                      adminPages.map((page) => (
+                        <Link to={adminRoutes[adminPages.indexOf(page)]} style={{ textDecoration: 'none' }} key={page}>
+                          <Button onClick={handleCloseNavMenu} sx={{ my: 2, color: 'white', display: 'block' }}>
+                            {page}
+                          </Button>
+                        </Link>
+                      ))}
                   </Box>
 
                   <Box sx={{ flexGrow: 0 }}>
