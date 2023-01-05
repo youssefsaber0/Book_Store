@@ -55,6 +55,7 @@ export default function EditBooks() {
   //   { ISBN: '551225224', title: 'aadas', numOfCopies: 5 },
   //   { ISBN: '551221221', title: 'aadas', numOfCopies: 5 },
   // ];
+
   const [books, setBooks] = useState<any>([]);
   const [showBooks, setShowBooks] = useState<any>([]);
 
@@ -66,8 +67,8 @@ export default function EditBooks() {
       // (old) => [...old, ...newArrayData];
 
       res.map((val: any) => {
-        setBooks([...books, { ISBN: val?.isbn, title: val?.title }]);
-        setShowBooks([...books, { ISBN: val?.isbn, title: val?.title }]);
+        setBooks((old: any) => [...old, { ISBN: val?.isbn, title: val?.title }]);
+        setShowBooks((old: any) => [...old, { ISBN: val?.isbn, title: val?.title }]);
         console.log({ ISBN: val?.isbn, title: val?.title });
       });
       // setBooks(res);
