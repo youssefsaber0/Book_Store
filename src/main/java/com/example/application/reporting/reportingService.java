@@ -22,21 +22,22 @@ public class reportingService {
     private BestSellersRepo bestSellersRepo;
 
 
-    public byte[] generateBookSalesReport(String destination_directory) {
+    public byte[] generateBookSalesReport() {
         return makeReport(templateDir + "best_sellers_template.jrxml", bookSalesRepo.findAll());
     }
 
-    public byte[] generateBestSellersReport(String destination_directory) {
+    public byte[] generateBestSellersReport() {
         return makeReport(templateDir + "best_sellers_template.jrxml",bestSellersRepo.findAll());
     }
 
-    public byte[] generateTopCustomersReport(String destination_directory) {
+    public byte[] generateTopCustomersReport() {
         return makeReport(templateDir + "top_customers_template.jrxml", topCustomersRepo.findAll());
     }
 
 
     private byte[] makeReport(String template, Collection<?> data){
         try {
+//            System.out.println(data);
             //Compile the Jasper report from .jrxml to .japser
             JasperReport jasperReport = JasperCompileManager
                     .compileReport(template);
