@@ -6,14 +6,24 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Button, Grid, InputAdornment, TextField } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { useEffect, useState } from 'react';
+import { HelloReactEndpoint } from 'Frontend/generated/endpoints';
 
 type userProps = {
   name: string;
   id: number;
+  setUsers: any;
+  setShowUsers: any;
+  users: any;
+  showUsers: any;
 };
-function User({ name, id }: userProps) {
+function User({ name, id, users, showUsers, setUsers, setShowUsers }: userProps) {
   function promote() {
     // TODO
+    HelloReactEndpoint.promote(id);
+    setUsers([]);
+    setShowUsers([]);
+    setUsers(users.filter((user: any) => user.user_id !== id));
+    setShowUsers(showUsers.filter((user: any) => user.user_id !== id));
   }
   return (
     <Accordion sx={{ backgroundColor: 'rgb(240, 240, 240)' }}>
@@ -36,19 +46,43 @@ function User({ name, id }: userProps) {
   );
 }
 export default function Promote() {
-  const users = [
-    { name: 'ALi', id: 1 },
-    { name: 'mhmd', id: 2 },
-    { name: 'saber', id: 3 },
-  ];
-  const [showUsers, setShowUsers] = useState<any>(users);
+  const [users, setUsers] = useState<any>([]);
+  const [showUsers, setShowUsers] = useState<any>([]);
+  const fetchUsers = () => {
+    HelloReactEndpoint.getAllUsers()
+      .then((response) => {
+        var useer = JSON.parse(response as string);
+
+        console.log(useer);
+        // useer.map((val: any) => setUsers((before: any) => [...before, val]));
+        setUsers(JSON.parse(response as string));
+        setShowUsers(JSON.parse(response as string));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   useEffect(() => {
+    fetchUsers();
     // change background color with a random color
-    setShowUsers(users);
+
+    // HelloReactEndpoint.getAllUsers().then((res) => {
+    // console.log(res);
+    // // (old) => [...old, ...newArrayData];
+    // setShowUsers([]);
+    // setUsers([]);
+    // res.map((val: any) => {
+    //   if (val?.role === 'customer') {
+    //     var user = { name: val?.first_name + ' ' + val?.last_name, id: val?.user_id };
+    //     setUsers([...users, user]);
+    //     setShowUsers([...users, user]);
+    //   }
+    // });
+    // });
   }, []);
   function filterUser(value: string) {
-    setShowUsers(users.filter((user) => user['name'].toLowerCase().includes(value.toLowerCase())));
+    setShowUsers(users.filter((user: any) => user.name.toLowerCase().includes(value.toLowerCase())));
   }
   return (
     <Grid>
@@ -75,9 +109,19 @@ export default function Promote() {
         />
       </Grid>
       <Grid xs={20} sm={12} sx={{ mx: 50, backgroundColor: 'white', width: '50vw', height: '100%' }}>
-        {showUsers?.map((user: any) => (
-          <User name={user['name']} id={user['id']} key={user['id']} />
-        ))}
+        {showUsers
+          ?.filter((user: any) => user['role'] !== 'admin')
+          .map((user: any) => (
+            <User
+              name={user['first_name'] + ' ' + user['last_name']}
+              users={users}
+              showUsers={showUsers}
+              setUsers={setUsers}
+              setShowUsers={setShowUsers}
+              id={user['user_id']}
+              key={user['user_id']}
+            />
+          ))}
       </Grid>
     </Grid>
   );

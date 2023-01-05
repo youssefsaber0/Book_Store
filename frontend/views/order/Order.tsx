@@ -18,18 +18,24 @@ import SearchIcon from '@mui/icons-material/Search';
 import AddIcon from '@mui/icons-material/Add';
 import { useEffect, useState } from 'react';
 import { isButtonElement } from 'react-router-dom/dist/dom';
+import { HelloReactEndpoint } from 'Frontend/generated/endpoints';
 // OrderPropss
 const theme = createTheme();
 type orderProps = {
   bookISBN: string;
   count: number;
+  setOrders: any;
+  setFilterdOrders: any;
+  orders: any;
+  filterdOrders: any;
+  id: number;
 };
-function Order({ bookISBN, count }: orderProps) {
+function Order({ bookISBN, count, setOrders, orders, setFilterdOrders, filterdOrders, id }: orderProps) {
   function accept() {
-    // TODO:
-  }
-  function refuse() {
-    // TODO:
+    console.log(id);
+    HelloReactEndpoint.confirmOrder(id);
+    setOrders(orders.filter((order: any) => order.id !== id));
+    setFilterdOrders(orders.filter((order: any) => order.id !== id));
   }
   return (
     <Card sx={{ width: '100%' }}>
@@ -42,11 +48,13 @@ function Order({ bookISBN, count }: orderProps) {
         </Typography>
       </CardContent>
       <CardActions>
-        <Button variant="contained" size="small" sx={{ backgroundColor: 'green' }} onClick={() => accept}>
-          Accept
-        </Button>
-        <Button sx={{ backgroundColor: 'red' }} variant="contained" size="small" onClick={() => refuse}>
-          Refuse
+        <Button
+          variant="contained"
+          size="small"
+          sx={{ backgroundColor: 'green', height: '60px' }}
+          onClick={() => accept()}
+        >
+          Confirm
         </Button>
       </CardActions>
     </Card>
@@ -55,8 +63,11 @@ function Order({ bookISBN, count }: orderProps) {
 type popUpProps = {
   open: boolean;
   setOpen: any;
+  setOrders: any;
+  setFilterdOrders: any;
+  fetch: any;
 };
-function PopUp({ open, setOpen }: popUpProps) {
+function PopUp({ open, setOpen, fetch }: popUpProps) {
   const [ISBN, setISBN] = useState('');
   const [nOC, setNOC] = useState(0);
   function newOrder() {
@@ -64,6 +75,10 @@ function PopUp({ open, setOpen }: popUpProps) {
       noc: nOC,
       ISBN: ISBN,
     });
+    HelloReactEndpoint.newOrder({
+      count: nOC,
+      isbn: ISBN,
+    }).then((value) => fetch());
   }
   return (
     <Dialog open={open}>
@@ -101,20 +116,30 @@ export default function OrderView() {
   const [openPopUp, setOpenPopUp] = useState(false);
   const [filteredOrders, setFilterdOrders] = useState<any>([]);
 
-  var orders = [
-    { bookISBN: '0021200', count: 50 },
-    { bookISBN: '0221201', count: 50 },
-    { bookISBN: '1221200', count: 50 },
-    { bookISBN: '5221200', count: 20 },
-    { bookISBN: '3221200', count: 10 },
-  ];
+  function fetch() {
+    setFilterdOrders([]);
+    setOrders([]);
+
+    HelloReactEndpoint.getOrders().then((resp) => {
+      console.log(resp);
+      // QTY: 50;
+      // isbn: 'nameaaaaa';
+      // order_id: 1;
+      resp.map((value: any) => {
+        console.log(value);
+        setOrders((old: any) => [...old, { bookISBN: value?.isbn, count: value?.QTY, id: value?.order_id }]);
+        setFilterdOrders((old: any) => [...old, { bookISBN: value?.isbn, count: value?.QTY, id: value?.order_id }]);
+      });
+    });
+  }
+  const [orders, setOrders] = useState<any>([]);
   function filterOrders(value: string) {
-    console.log(orders.filter((order) => order['bookISBN'].includes(value)));
-    setFilterdOrders(orders.filter((order) => order['bookISBN'].includes(value)));
+    console.log(orders?.filter((order: any) => order['bookISBN'].includes(value)));
+    setFilterdOrders(orders?.filter((order: any) => order['bookISBN'].includes(value)));
   }
   useEffect(() => {
     // change background color with a random color
-    setFilterdOrders(orders);
+    fetch();
   }, []);
   return (
     <ThemeProvider theme={theme}>
@@ -122,7 +147,7 @@ export default function OrderView() {
         <style>{'body { background-color: red; }'}</style>
       </Helmet> */}
       <Grid container component="main" sx={{ width: '100vw', height: '100%' }}>
-        <Grid xs={20} sm={12} sx={{ mt: 10, mx: 50 }}>
+        <Grid xs={20} sm={12} sx={{ mt: 10, mx: 50 }} item>
           <Typography component="h1" variant="h5">
             Orders
           </Typography>
@@ -156,12 +181,27 @@ export default function OrderView() {
             >
               New order
             </Button>
-            <PopUp open={openPopUp} setOpen={setOpenPopUp} />
+            <PopUp
+              open={openPopUp}
+              setOrders={setOrders}
+              setFilterdOrders={setFilterdOrders}
+              setOpen={setOpenPopUp}
+              fetch={fetch}
+            />
           </div>
         </Grid>
-        <Grid xs={20} sm={12} sx={{ mx: 50, backgroundColor: 'white', width: '50vw', height: '100%' }}>
-          {filteredOrders?.map((order: any) => (
-            <Order bookISBN={order['bookISBN']} count={order['count']} key={order['bookISBN']} />
+        <Grid xs={20} sm={12} sx={{ mx: 50, backgroundColor: 'white', width: '50vw', height: '100%' }} item>
+          {filteredOrders?.map((value: any) => (
+            <Order
+              setOrders={setOrders}
+              setFilterdOrders={setFilterdOrders}
+              orders={orders}
+              filterdOrders={filterOrders}
+              bookISBN={value['bookISBN']}
+              count={value['count']}
+              id={value['id']}
+              key={value['id']}
+            />
           ))}
         </Grid>
       </Grid>
