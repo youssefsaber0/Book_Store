@@ -130,6 +130,6 @@ public class reportingServiceTest {
                 new TopCustomersView(0,"fname_0","lname_0","user_0@gmail.com",123),
                 new TopCustomersView(1,"fname_1","lname_1","user_1@gmail.com",123),
                 new TopCustomersView(2,"fname_2","lname_2","user_2@gmail.com",123))));
-        System.out.println(Arrays.toString(s.generateBookSalesReport()));
+        System.out.println(Arrays.toString(s.generateTopCustomersReport()));
     }
 }

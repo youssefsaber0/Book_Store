@@ -23,15 +23,15 @@ public class reportingService {
 
 
     public byte[] generateBookSalesReport() {
-        return makeReport(templateDir + "best_sellers_template.jrxml", bookSalesRepo.findAll());
+        return makeReport(templateDir + "sales_temp.jrxml", bookSalesRepo.findAll());
     }
 
     public byte[] generateBestSellersReport() {
-        return makeReport(templateDir + "best_sellers_template.jrxml",bestSellersRepo.findAll());
+        return makeReport(templateDir + "best_sellers_temp.jrxml",bestSellersRepo.findAll());
     }
 
     public byte[] generateTopCustomersReport() {
-        return makeReport(templateDir + "top_customers_template.jrxml", topCustomersRepo.findAll());
+        return makeReport(templateDir + "customers_temp.jrxml", topCustomersRepo.findAll());
     }
 
 

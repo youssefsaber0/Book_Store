@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.0.final using JasperReports Library version 6.20.0-2bc7ab61c56f459e8176eb05c7705e145cd400ad  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Waves" pageWidth="595" pageHeight="824" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="0" bottomMargin="0" uuid="e9bb1a27-f975-4aa4-98f9-75524c5daafa">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<style name="Title" fontName="Arial" fontSize="26" isBold="true"/>
+	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
+	<style name="column" forecolor="#FFFFFF" fontName="Arial" fontSize="12" vTextAlign="Justified" hTextAlign="Center"/>
+
+	<style name="Column header" forecolor="#FFFFFF" fontName="Arial" fontSize="7" isBold="true"/>
+	<style name="Detail" fontName="Arial" fontSize="12"/>
+	<field name="isbn" class="java.lang.String"/>
+	<field name="title" class="java.lang.String"/>
+	<field name="price" class="java.lang.Double"/>
+	<field name="publisher_name" class="java.lang.String"/>
+	<field name="sold_amount" class="java.lang.Integer"/>
+	<background>
+		<band height="822" >
+			<frame>
+				<reportElement mode="Opaque" x="-20" y="722" width="105" height="100" forecolor="#666666" backcolor="#080614" uuid="58048a65-569d-454e-b6dd-f3bb46c94ee3"/>
+				<textField>
+					<reportElement style="Column header" x="4" y="0" width="96" height="73" forecolor="#83BCEB" uuid="0f40ce36-78f2-49e5-adf5-8855d6516e74"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="58" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement mode="Transparent" x="42" y="73" width="20" height="1" uuid="ab96a4b0-8a0d-4ae2-8695-16868926ec2b"/>
+				</line>
+			</frame>
+			<frame>
+				<reportElement x="-20" y="0" width="244" height="722" uuid="cae67de6-7749-4005-8f3c-2ddb17900a5f"/>
+				<image>
+					<reportElement positionType="FixRelativeToBottom" stretchType="ElementGroupHeight" x="0" y="565" width="105" height="159" uuid="5788619e-5ac3-45a0-ac64-2a92432a8939">
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+						<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					</reportElement>
+					<imageExpression><![CDATA["https://images.unsplash.com/photo-1509291985095-788b32582a81?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MjN8fGJvb2slMjBzdG9yZXxlbnwwfDF8MHx8&auto=format&fit=crop&w=500&q=60"]]></imageExpression>
+				</image>
+				<image>
+					<reportElement positionType="FixRelativeToBottom" stretchType="ElementGroupHeight" x="0" y="380" width="105" height="187" uuid="050e3c2b-3743-4166-9db0-6d4cb80c1100">
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+						<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					</reportElement>
+					<imageExpression><![CDATA["https://images.unsplash.com/photo-1590272456521-1bbe160a18ce?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTZ8fGJsYWNrfGVufDB8MXwwfHw%3D&auto=format&fit=crop&w=500&q=60"]]></imageExpression>
+				</image>
+				<image>
+					<reportElement positionType="FixRelativeToBottom" stretchType="ElementGroupHeight" x="0" y="194" width="105" height="187" uuid="762ca64d-b5ae-4fb0-836c-b607f4ca1fe0">
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+						<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					</reportElement>
+					<imageExpression><![CDATA["https://images.unsplash.com/photo-1590272456521-1bbe160a18ce?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTZ8fGJsYWNrfGVufDB8MXwwfHw%3D&auto=format&fit=crop&w=500&q=60"]]></imageExpression>
+				</image>
+				<image>
+					<reportElement positionType="FixRelativeToBottom" stretchType="ElementGroupHeight" x="0" y="8" width="105" height="187" uuid="1eeadb81-36de-4ca9-a715-d5f67d2c1f10">
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+						<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					</reportElement>
+					<imageExpression><![CDATA["https://images.unsplash.com/photo-1590272456521-1bbe160a18ce?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTZ8fGJsYWNrfGVufDB8MXwwfHw%3D&auto=format&fit=crop&w=500&q=60"]]></imageExpression>
+				</image>
+				<image>
+					<reportElement positionType="FixRelativeToBottom" stretchType="ElementGroupHeight" x="0" y="-178" width="105" height="187" uuid="342d650e-9872-426d-86a3-ad0d8d8d7adb">
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+						<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					</reportElement>
+					<imageExpression><![CDATA["https://images.unsplash.com/photo-1590272456521-1bbe160a18ce?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTZ8fGJsYWNrfGVufDB8MXwwfHw%3D&auto=format&fit=crop&w=500&q=60"]]></imageExpression>
+				</image>
+				<image>
+					<reportElement positionType="FixRelativeToBottom" stretchType="ElementGroupHeight" x="0" y="-320" width="105" height="187" uuid="98df0902-b22c-4617-a184-11279e8e7a5a">
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+						<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					</reportElement>
+					<imageExpression><![CDATA["https://images.unsplash.com/photo-1590272456521-1bbe160a18ce?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTZ8fGJsYWNrfGVufDB8MXwwfHw%3D&auto=format&fit=crop&w=500&q=60"]]></imageExpression>
+				</image>
+			</frame>
+		</band>
+	</background>
+	<title>
+		<band height="152" splitType="Stretch">
+			<staticText>
+				<reportElement style="Title" x="0" y="0" width="555" height="115" uuid="524767a9-e7e5-4041-9b08-5a7210b38e22"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="54" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Best Sellers]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="SubTitle" x="234" y="115" width="321" height="37" uuid="bd605e96-6228-492c-9dd6-f33258081a5a"/>
+				<textElement textAlignment="Right">
+					<font size="26"/>
+				</textElement>
+				<text><![CDATA[Book Store]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="25" splitType="Stretch">
+			<frame>
+				<reportElement mode="Opaque" x="97" y="10" width="458" height="15" backcolor="#666666" uuid="eb0fefed-b830-492b-a0c9-ec23411537a7"/>
+			</frame>
+			<staticText>
+				<reportElement style="column" x="97" y="10" width="100" height="15"/>
+				<textElement textAlignment="Center">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ISBN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="column" x="197" y="10" width="120" height="15"/>
+				<textElement textAlignment="Center">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TITLE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="column" x="317" y="10" width="60" height="15"/>
+				<textElement textAlignment="Center">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[PRICE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="column" x="377" y="10" width="110" height="15"/>
+				<textElement textAlignment="Center">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[PUBLISHER]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="column" x="487" y="10" width="60" height="15"/>
+				<textElement textAlignment="Center">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[SOLD]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="21" splitType="Stretch">
+			<frame>
+				<reportElement x="97" y="1" width="458" height="15" uuid="5d75be3e-ea39-4b96-baf8-b49497315044"/>
+			</frame>
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="97" y="16" width="458" height="1" uuid="2b97af27-2a1e-491f-a0f4-b2549a3510ee"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<textField>
+				<reportElement x="97" y="1" width="100" height="15"/>
+				<textElement textAlignment="Center" />
+				<textFieldExpression><![CDATA[$F{isbn}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="197" y="1" width="120" height="15"/>
+				<textElement textAlignment="Center" />
+				<textFieldExpression><![CDATA[$F{title}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="317" y="1" width="60" height="15"/>
+				<textElement textAlignment="Center" />
+				<textFieldExpression><![CDATA[$F{price}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="377" y="1" width="110" height="15"/>
+				<textElement textAlignment="Center" />
+				<textFieldExpression><![CDATA[$F{publisher_name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="487" y="1" width="60" height="15"/>
+				<textElement textAlignment="Center" />
+				<textFieldExpression><![CDATA[$F{sold_amount}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+
+		<band height="100" splitType="Stretch">
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement style="Column header" x="424" y="0" width="131" height="20" forecolor="#000000" uuid="f8570c2f-4404-4725-885a-4eb3c26abb4a"/>
+				<textElement textAlignment="Right">
+					<font size="12" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="Column header" x="96" y="0" width="267" height="20" forecolor="#000000" uuid="fce324aa-31f5-453a-a957-28bc6f740c75"/>
+				<textElement>
+					<font size="12" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Book Sales Report]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>
