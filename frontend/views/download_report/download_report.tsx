@@ -29,64 +29,39 @@ import { Button, Grid, InputAdornment, TextField } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { useEffect, useState } from 'react';
 import { ReportingEndPoint } from 'Frontend/generated/endpoints';
-import { saveAs } from 'file-saver';
+// import { saveAs } from 'file-saver';
 
 type userProps = {
   name: string;
 };
 function Report({ name }: userProps) {
-  function promote() {
-    // TODO
+  function downloadRandomReport() {
+    downloadBestSellersReport();
   }
-
-//   function downloadRandomReport() {
-//     //url
-//     ReportingEndPoint.downloadBookSalesReport().then((response) => {
-//       console.log(response?.headers);
-//       const filename = response?.headers?.get('Content-Disposition')?.split('filename=')[1];
-//       response.blob().then((blob) => {
-//         let url = window.URL.createObjectURL(blob);
-//         let a = document.createElement('a');
-//         a.href = url;
-//         a.download = filename as string;
-//         a.click();
-//       });
-//     });
-//   }
-    function downloadBookSalesReport() {
-    ReportingEndPoint.downloadBookSalesReport().blob().then((blob) => {
-        const file = new Blob([blob], {
-          type: 'application/pdf',
-        });
-
-        const fileURL = URL.createObjectURL(file);
-        window.open(fileURL);
-        saveAs(file, 'BookSalesReport');
+  function downloadBookSalesReport() {
+    ReportingEndPoint.downloadBookSalesReport().then((dataUrl) => {
+      const linkElement = document.createElement('a');
+      linkElement.setAttribute('href', dataUrl as string);
+      linkElement.setAttribute('download', 'BookSalesReport');
+      linkElement.click();
     });
   }
-      function downloadBestSellersReport() {
-      ReportingEndPoint.downloadBestSellersReport().blob().then((blob) => {
-          const file = new Blob([blob], {
-            type: 'application/pdf',
-          });
-
-          const fileURL = URL.createObjectURL(file);
-          window.open(fileURL);
-          saveAs(file, 'BestSellersReport');
-      });
-    }
-        function downloadTopCustomersReport() {
-        ReportingEndPoint.downloadTopCustomersReport().blob().then((blob) => {
-            const file = new Blob([blob], {
-              type: 'application/pdf',
-            });
-
-            const fileURL = URL.createObjectURL(file);
-            window.open(fileURL);
-            saveAs(file, 'TopCustomersReport');
-
-        });
-      }
+  function downloadBestSellersReport() {
+    ReportingEndPoint.downloadBestSellersReport().then((dataUrl) => {
+      const linkElement = document.createElement('a');
+      linkElement.setAttribute('href', dataUrl as string);
+      linkElement.setAttribute('download', 'BestSellersReport');
+      linkElement.click();
+    });
+  }
+  function downloadTopCustomersReport() {
+    ReportingEndPoint.downloadTopCustomersReport().then((dataUrl) => {
+      const linkElement = document.createElement('a');
+      linkElement.setAttribute('href', dataUrl as string);
+      linkElement.setAttribute('download', 'TopCustomersReport');
+      linkElement.click();
+    });
+  }
   return (
     <Accordion sx={{ backgroundColor: 'rgb(240, 240, 240)' }}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1a-content" id="id">
@@ -107,7 +82,6 @@ export default function DownloadReport() {
   const [showReports, setShowReports] = useState<any>();
 
   useEffect(() => {
-    // change background color with a random color
     setShowReports(Reports);
   }, []);
   function filterUser(value: string) {
@@ -137,7 +111,7 @@ export default function DownloadReport() {
           autoFocus
         />
       </Grid>
-      <Grid xs={20} sm={12} sx={{ mx: 50, backgroundColor: 'white', width: '50vw', height: '100%' }}>
+      <Grid xs={20} sm={12} sx={{ mx: 50, backgroundColor: 'white', width: '50vw', height: '100%' }} item>
         {showReports?.map((user: any) => (
           <Report name={user['name']} key={user['id']} />
         ))}

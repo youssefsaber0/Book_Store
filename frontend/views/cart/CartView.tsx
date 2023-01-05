@@ -31,17 +31,18 @@ export default function ShopView() {
 
   return (
     <Stack maxWidth="xl" spacing={2} alignItems="flex-start" direction={{ xs: 'column', md: 'row' }}>
-      {books.map((book) => (
-        <BookCart
-          key={book.isbn}
-          isbn={book.isbn}
-          title={book.title}
-          price={book.price}
-          quantity={book.quantity}
-          onRemove={handleItemRemove}
-          sx={{ flex: 2 }}
-        />
-      ))}
+      <Stack direction="column" spacing={2} sx={{ flex: 2 }}>
+        {books.map((book) => (
+          <BookCart
+            key={book.isbn}
+            isbn={book.isbn}
+            title={book.title}
+            price={book.price}
+            quantity={book.quantity}
+            onRemove={handleItemRemove}
+          />
+        ))}
+      </Stack>
       <CostCard total={totalCost} sx={{ flex: 1 }} />
     </Stack>
   );
