@@ -122,6 +122,14 @@ export default function SignupView() {
     }
     return true;
   };
+  const isValidNumber = () => {
+    const regex = new RegExp('^01[0-9]{9}$');
+    if (regex.test(phoneNumber) === false) {
+      console.log(false);
+      return false;
+    }
+    return true;
+  };
 
   return (
     <Grid container component="main" sx={{ height: '100vh' }}>
@@ -207,6 +215,8 @@ export default function SignupView() {
                     setPhoneNumber(e.currentTarget.value);
                   }}
                   name="phoneNumber"
+                  error={!isValidNumber()}
+                  helperText={!isValidNumber() ? 'Not valid Number' : ''}
                   autoFocus
                 />
                 <TextField

@@ -62,28 +62,28 @@ begin
 		END;
 	start transaction;
 		-- insert the info
-        insert into bookstore.checkout_info(user_id,credit_card,date_out) 
-        value(userId,card_no,current_date());
+        insert into BOOKSTORE.CHECKOUT_INFO(user_id, credit_card, date_out) 
+        value(userId, card_no, current_date());
         select last_insert_id() into last_id;
         -- get all items in cart and place them in sold books ...  
-        insert into bookstore.sold_book 
-        (select last_id,c.isbn,c.qty,b.price 
-        from bookstore.cart as c natural join bookstore.book as b 
+        insert into BOOKSTORE.SOLD_BOOK 
+        (select last_id, c.isbn, c.qty, b.price 
+        from BOOKSTORE.CART as c natural join BOOKSTORE.BOOK as b 
         where c.user_id=userId);
         
         -- update the stock
-        update bookstore.book as b1
+        update BOOKSTORE.BOOK as b1
         set 
         b1.stock = b1.stock - (select e.qty 
-								from bookstore.cart as e
+								from BOOKSTORE.CART as e
                                 where e.user_id=userId and b1.isbn=e.isbn)
         where b1.isbn in (select c.isbn
-        from bookstore.cart as c 
+        from BOOKSTORE.CART as c 
         where c.user_id=userId);
         
         
         -- delete from cart
-		delete from bookstore.cart as c where c.user_id = userId;
+		delete from BOOKSTORE.CART as c where c.user_id = userId;
 	
 		select true as response;
 	commit;
