@@ -3,13 +3,11 @@ package com.example.application.reporting.views;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Immutable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.io.Serializable;
 @AllArgsConstructor
 @Entity
 @Table(name = "book_sales")

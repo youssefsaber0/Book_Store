@@ -12,6 +12,8 @@ interface BookCardProps {
   title: string;
   authors: string[];
   publisher: string;
+  publication_year: string;
+  category: string;
   isbn: string;
   price: number;
   stock: number;
@@ -57,7 +59,10 @@ export default function BookCard(props: BookCardProps) {
               Authored by {props.authors.join(', ')}
             </Typography>
             <Typography fontSize={14} color={'grey.600'}>
-              Published by {props.publisher}
+              Published by {props.publisher} in {props.publication_year}
+            </Typography>
+            <Typography fontSize={14} color={'grey.600'}>
+              Category: {props.category}
             </Typography>
             <Typography fontSize={14} color={'grey.600'}>
               ISBN: {props.isbn}

@@ -15,7 +15,9 @@ interface BooksResponse {
   isbn: string;
   title: string;
   authors: string;
+  publisher_name: string;
   publication_year: string;
+  category_name: string;
   price: number;
   stock: number;
 }
@@ -36,6 +38,8 @@ export default function ShopView() {
         ? HelloReactEndpoint.searchBookByAuthor(keyword, page)
         : criteria === 'publisher'
         ? HelloReactEndpoint.searchBookByPublisher(keyword, page)
+        : criteria === 'category'
+        ? HelloReactEndpoint.searchBookByCategory(keyword, page)
         : HelloReactEndpoint.searchBookByISBN(keyword, page);
 
     bookPromise.then((response) => {
@@ -87,6 +91,7 @@ export default function ShopView() {
           <option value="author">author</option>
           <option value="publisher">publisher</option>
           <option value="isbn">isbn</option>
+          <option value="category">category</option>
         </Select>
       </Stack>
       {books.map((book) => (
@@ -94,7 +99,9 @@ export default function ShopView() {
           key={book.isbn}
           title={book.title}
           authors={book.authors.split(',')}
-          publisher={book.publication_year}
+          publisher={book.publisher_name}
+          publication_year={book.publication_year}
+          category={book.category_name}
           isbn={book.isbn}
           price={book.price}
           stock={book.stock}
