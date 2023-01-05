@@ -1,53 +1,58 @@
--- ---------------------------------
--- Delete item from cart procedure
--- ---------------------------------
-
-
-DELIMITER $$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `delete_item_from_cart`(id varchar(17))
+DELIMITER //
+create procedure dec_book_quantity_by(book_isbn varchar(17), val int)
 BEGIN
-	Delete from cart where isbn = id;
-END $$
-DELIMITER 
+	update BOOK set stock = stock - val where isbn = book_isbn;
+END
+//
 
-
--- ---------------------------------
--- Get items in cart procedure
--- ---------------------------------
-
-DELIMITER $$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `get_items_in_cart`(id int)
+DELIMITER //
+create procedure add_book(isbn varchar(17), title varchar(255), category int, publication_year int, stock int, threshold int, price double, publisher_name varchar(50))
 BEGIN
-    select * from cart where user_id = id;
-END $$
-DELIMITER 
+    insert into BOOK 
+    values(isbn, title, category, publication_year, stock, threshold, price, publisher_name);
+END
+//
 
 
--- ---------------------------------
--- Get prices procedure
--- ---------------------------------
 
-DELIMITER $$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `get_prices`(id int)
+DELIMITER // 
+create procedure get_book_by_id(book_isbn varchar(17))
 BEGIN
-    select b.isbn, b.title,b.price,qty as quantity, price*qty as total_price
-    FROM cart 
-    JOIN book as b using(isbn)
-    where user_id = id;
-END $$
-DELIMITER 
-
--- ---------------------------------
--- Logout procedure
--- ---------------------------------
+	select * from BOOK where isbn = book_isbn;
+END
+//
 
 
-DELIMITER $$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `Logout`(id int)
+DELIMITER // 
+create procedure get_book_by_category(cat int)
 BEGIN
-    DELETE FROM cart WHERE user_id=id;
-END $$
-DELIMITER 
+	select * from BOOK where category = cat;
+END
+//
+
+
+DELIMITER // 
+create procedure get_book_by_author(auth varchar(255))
+BEGIN
+	select BOOK.* from BOOK join AUTHOR on BOOK.isbn where AUTHOR.author_name = auth;
+END
+//
+
+
+DELIMITER // 
+create procedure get_book_by_publisher(pub varchar(50))
+BEGIN
+	select * from BOOK where publisher_name = pub;
+END
+//
+
+DELIMITER //
+create procedure add_author(book_isbn varchar(13), auth varchar(255))
+BEGIN
+    insert into AUTHOR
+    values(book_isbn, auth);
+END
+//
 
 DELIMITER $$
 create procedure checkout_cart(userId int, card_no varchar(16))
